@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'controller/take_a_selfie_controller.dart';
+import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
 import 'package:hifdzi_s_application3/widgets/custom_elevated_button.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -117,19 +120,44 @@ class TakeASelfieScreen extends StatelessWidget {
   }
 
   /// Navigates to the homeUniqueCodeScreen when the action is triggered.
-  onTapSaveSection() {
-    Get.toNamed(
-      AppRoutes.homeUniqueCodeScreen,
-    );
+  Future<void> onTapSaveSection() async {
+    if (_controller != null && _controller!.value.isInitialized) {
+      try {
+        final XFile imageFile = await _controller!.takePicture();
+
+        final String directoryPath = 'lib/images';
+
+        Directory imagesDirectory = Directory(directoryPath);
+        if (!imagesDirectory.existsSync()) {
+          imagesDirectory.createSync(recursive: true);
+        }
+
+        final String fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+        final String imagePath = '$directoryPath/$fileName';
+
+        final File savedImage = File(imagePath);
+        await savedImage.writeAsBytes(await imageFile.readAsBytes());
+
+        print('Image saved successfully at: $imagePath');
+
+        Get.toNamed(AppRoutes.homeUniqueCodeScreen);
+      } catch (e) {
+        print('Error taking picture: $e');
+      }
+    } else {
+      // Camera controller is not initialized or not in the correct state
+      // Handle this case appropriately, e.g., show an error message
+    }
   }
 
   late CameraController? _controller;
 
   Future<void> _initializeCamera() async {
     final cameras = await availableCameras();
-    final firstCamera = cameras.first;
+    final frontCam = cameras[1];
     _controller = CameraController(
-      firstCamera,
+      frontCam,
       ResolutionPreset.medium,
     );
     await _controller!.initialize();

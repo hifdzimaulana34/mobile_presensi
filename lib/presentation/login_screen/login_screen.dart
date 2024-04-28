@@ -207,7 +207,7 @@ class LoginScreen extends GetWidget<LoginController> {
     String name = controller.nameController.text;
     String pass = controller.passwordController.text;
 
-    String url = 'http://192.168.0.103/testingphp/login.php';
+    String url = 'http://192.168.0.107/testingphp/login.php';
     var response = await http.post(Uri.parse(url), body: {
       "name": name,
       "password": pass,

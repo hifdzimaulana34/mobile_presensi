@@ -117,7 +117,7 @@ class SignUpScreen extends GetWidget<SignUpController> {
     String phone = controller.phoneNumberController.text;
 
     // Construct the URL of your PHP script
-    String url = 'http://192.168.0.103/testingphp/register.php';
+    String url = 'http://192.168.0.107/testingphp/register.php';
 
     // Create a map containing the form data
     Map<String, String> formData = {

@@ -21,7 +21,7 @@ class WelcomeScreen extends GetWidget<WelcomeController> {
                       width: 263.h),
                   SizedBox(height: 21.v),
                   SizedBox(
-                      width: 114.h,
+                      width: 125.h,
                       child: Text("lbl_hello".tr,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

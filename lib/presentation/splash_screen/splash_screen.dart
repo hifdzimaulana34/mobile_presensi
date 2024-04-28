@@ -22,7 +22,7 @@ class SplashScreen extends GetWidget<SplashController> {
                           width: 263.h),
                       SizedBox(height: 20.v),
                       SizedBox(
-                          width: 145.h,
+                          width: 175.h,
                           child: Text("lbl_presensee".tr,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
