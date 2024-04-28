@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 /// This class manages the state of the LoginScreen, including the
 /// current loginModelObj
 class LoginController extends GetxController {
-  TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
 
@@ -18,7 +18,7 @@ class LoginController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    emailController.dispose();
+    nameController.dispose();
     passwordController.dispose();
   }
 }

@@ -1,3 +1,5 @@
+import 'package:flutter/gestures.dart';
+
 import 'controller/sign_up_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
@@ -7,6 +9,7 @@ import 'package:hifdzi_s_application3/widgets/app_bar/custom_app_bar.dart';
 import 'package:hifdzi_s_application3/widgets/custom_drop_down.dart';
 import 'package:hifdzi_s_application3/widgets/custom_elevated_button.dart';
 import 'package:hifdzi_s_application3/widgets/custom_text_form_field.dart';
+import 'package:http/http.dart' as http;
 
 // ignore_for_file: must_be_immutable
 class SignUpScreen extends GetWidget<SignUpController> {
@@ -38,23 +41,23 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                   style: theme.textTheme.titleLarge),
                               SizedBox(height: 31.v),
                               _buildFullName(),
-                              SizedBox(height: 13.v),
-                              CustomDropDown(
-                                  icon: Container(
-                                      margin: EdgeInsets.fromLTRB(
-                                          30.h, 10.v, 14.h, 10.v),
-                                      child: CustomImageView(
-                                          imagePath: ImageConstant.imgCheckmark,
-                                          height: 10.v,
-                                          width: 15.h)),
-                                  hintText: "lbl_gender".tr,
-                                  items: controller.signUpModelObj.value
-                                      .dropdownItemList!.value,
-                                  onChanged: (value) {
-                                    controller.onSelected(value);
-                                  }),
-                              SizedBox(height: 13.v),
-                              _buildDateOfBirth(),
+                              // SizedBox(height: 13.v),
+                              // CustomDropDown(
+                              //     icon: Container(
+                              //         margin: EdgeInsets.fromLTRB(
+                              //             30.h, 10.v, 14.h, 10.v),
+                              //         child: CustomImageView(
+                              //             imagePath: ImageConstant.imgCheckmark,
+                              //             height: 10.v,
+                              //             width: 15.h)),
+                              //     hintText: "lbl_gender".tr,
+                              //     items: controller.signUpModelObj.value
+                              //         .dropdownItemList!.value,
+                              //     onChanged: (value) {
+                              //       controller.onSelected(value);
+                              //     }),
+                              // SizedBox(height: 13.v),
+                              // _buildDateOfBirth(),
                               SizedBox(height: 15.v),
                               _buildPhoneNumber(),
                               SizedBox(height: 10.v),
@@ -91,12 +94,60 @@ class SignUpScreen extends GetWidget<SignUpController> {
                                                               .copyWith(
                                                                   decoration:
                                                                       TextDecoration
-                                                                          .underline))
+                                                                          .underline),
+                                                          recognizer:
+                                                              TapGestureRecognizer()
+                                                                ..onTap = () {
+                                                                  Get.toNamed(
+                                                                    AppRoutes
+                                                                        .loginScreen,
+                                                                  );
+                                                                })
                                                     ]),
                                                     textAlign: TextAlign.left))
                                           ]))),
                               SizedBox(height: 5.v)
                             ])))))));
+  }
+
+  void onTapSignUp() async {
+    String name = controller.fullNameController.text;
+    String password = controller.passwordController.text;
+    String email = controller.emailController.text;
+    String phone = controller.phoneNumberController.text;
+
+    // Construct the URL of your PHP script
+    String url = 'http://192.168.0.103/testingphp/register.php';
+
+    // Create a map containing the form data
+    Map<String, String> formData = {
+      'name': name,
+      'password': password,
+      'email': email,
+      'phone': phone,
+    };
+
+    // Send the HTTP POST request
+    try {
+      http.Response response = await http.post(Uri.parse(url), body: formData);
+
+      // Check the response from the server
+      if (response.statusCode == 200) {
+        // Successful registration
+        print('Registration successful');
+        Get.toNamed(
+          AppRoutes.welcomeScreen,
+        );
+        // You can handle the response further if needed
+      } else {
+        // Registration failed
+        print('Registration failed: ${response.body}');
+        // You can handle the failure scenario here
+      }
+    } catch (error) {
+      print('Error sending request: $error');
+      // Handle the error scenario here
+    }
   }
 
   /// Section Widget
@@ -207,9 +258,9 @@ class SignUpScreen extends GetWidget<SignUpController> {
   }
 
   /// Navigates to the loginScreen when the action is triggered.
-  onTapSignUp() {
-    Get.toNamed(
-      AppRoutes.loginScreen,
-    );
-  }
+  // onTapSignUp() {
+  //   Get.toNamed(
+  //     AppRoutes.loginScreen,
+  //   );
+  // }
 }

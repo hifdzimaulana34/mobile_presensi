@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'controller/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
@@ -6,6 +7,9 @@ import 'package:hifdzi_s_application3/widgets/app_bar/appbar_leading_image.dart'
 import 'package:hifdzi_s_application3/widgets/app_bar/custom_app_bar.dart';
 import 'package:hifdzi_s_application3/widgets/custom_elevated_button.dart';
 import 'package:hifdzi_s_application3/widgets/custom_text_form_field.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:convert' show json;
+import 'package:http/http.dart' as http;
 
 // ignore_for_file: must_be_immutable
 class LoginScreen extends GetWidget<LoginController> {
@@ -47,9 +51,8 @@ class LoginScreen extends GetWidget<LoginController> {
                                   Padding(
                                       padding: EdgeInsets.only(left: 18.h),
                                       child: CustomTextFormField(
-                                          controller:
-                                              controller.emailController,
-                                          hintText: "lbl_email".tr,
+                                          controller: controller.nameController,
+                                          hintText: "name".tr,
                                           textInputType:
                                               TextInputType.emailAddress,
                                           alignment: Alignment.centerRight,
@@ -153,7 +156,15 @@ class LoginScreen extends GetWidget<LoginController> {
                                                           .copyWith(
                                                               decoration:
                                                                   TextDecoration
-                                                                      .underline))
+                                                                      .underline),
+                                                      recognizer:
+                                                          TapGestureRecognizer()
+                                                            ..onTap = () {
+                                                              Get.toNamed(
+                                                                AppRoutes
+                                                                    .signUpScreen,
+                                                              );
+                                                            })
                                                 ]),
                                                 textAlign: TextAlign.left))
                                       ])),
@@ -192,10 +203,52 @@ class LoginScreen extends GetWidget<LoginController> {
   }
 
   /// Navigates to the homeAwalScreen when the action is triggered.
-  onTapLOGIN() {
-    Get.toNamed(
-      AppRoutes.homeAwalScreen,
-    );
+  void onTapLOGIN() async {
+    String name = controller.nameController.text;
+    String pass = controller.passwordController.text;
+
+    String url = 'http://192.168.0.103/testingphp/login.php';
+    var response = await http.post(Uri.parse(url), body: {
+      "name": name,
+      "password": pass,
+    });
+
+    print("Server Response: ${response.body}");
+
+    try {
+      var data = json.decode(response.body);
+      if (data == "Success") {
+        Fluttertoast.showToast(
+            msg: "Login Success",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
+
+        Get.toNamed(AppRoutes.homeAwalScreen);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Login Failed",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } catch (e) {
+      print("Error decoding JSON response: $e");
+      Fluttertoast.showToast(
+          msg: "Unexpected error occurred",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 
   /// Navigates to the forgotPasswordScreen when the action is triggered.

@@ -2,9 +2,11 @@ import 'controller/take_a_selfie_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
 import 'package:hifdzi_s_application3/widgets/custom_elevated_button.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:camera/camera.dart';
 
-class TakeASelfieScreen extends GetWidget<TakeASelfieController> {
-  const TakeASelfieScreen({Key? key}) : super(key: key);
+class TakeASelfieScreen extends StatelessWidget {
+  TakeASelfieScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +31,52 @@ class TakeASelfieScreen extends GetWidget<TakeASelfieController> {
                                 style: CustomTextStyles.titleLargeGray50)),
                       )),
                   SizedBox(height: 10.v),
-                  _buildProfileSection()
+                  _buildProfileSection(context)
                 ])),
             bottomNavigationBar: _buildSaveSection()));
   }
 
-  /// Section Widget
+  Widget _buildProfileSection(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _checkCameraPermission(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.data == true) {
+          return GestureDetector(
+            onTap: () => _openCamera(context),
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 33),
+              padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+              decoration: BoxDecoration(
+                color:
+                    Colors.transparent, // Set background color to transparent
+                borderRadius: BorderRadius.circular(8.0), // Add rounded corners
+                border: Border.all(
+                    color: Colors.black, width: 5), // Add thin black border
+              ),
+              width: 250,
+              height: 250,
+              child: FutureBuilder<void>(
+                future: _initializeCamera(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      _controller != null) {
+                    return CameraPreview(_controller!);
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
+            ),
+          );
+        } else {
+          return Text("Camera permission not granted");
+        }
+      },
+    );
+  }
+
   Widget _buildTakeASelfieSection() {
     return SizedBox(
         height: 74.v,
@@ -61,19 +103,6 @@ class TakeASelfieScreen extends GetWidget<TakeASelfieController> {
         ]));
   }
 
-  /// Section Widget
-  Widget _buildProfileSection() {
-    return Container(
-        margin: EdgeInsets.symmetric(horizontal: 33.h),
-        padding: EdgeInsets.symmetric(horizontal: 10.h, vertical: 21.v),
-        decoration: AppDecoration.fillBluegray10001,
-        child: CustomImageView(
-            imagePath: ImageConstant.imgProfileFreeVe,
-            height: 200.v,
-            width: 200.h));
-  }
-
-  /// Section Widget
   Widget _buildSaveSection() {
     return CustomElevatedButton(
         height: 53.v,
@@ -91,6 +120,76 @@ class TakeASelfieScreen extends GetWidget<TakeASelfieController> {
   onTapSaveSection() {
     Get.toNamed(
       AppRoutes.homeUniqueCodeScreen,
+    );
+  }
+
+  late CameraController? _controller;
+
+  Future<void> _initializeCamera() async {
+    final cameras = await availableCameras();
+    final firstCamera = cameras.first;
+    _controller = CameraController(
+      firstCamera,
+      ResolutionPreset.medium,
+    );
+    await _controller!.initialize();
+  }
+
+  Future<bool> _checkCameraPermission() async {
+    var status = await Permission.camera.status;
+    if (status.isDenied) {
+      status = await Permission.camera.request();
+      if (status.isDenied) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void _openCamera(BuildContext context) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CameraScreen(controller: _controller!),
+      ),
+    );
+  }
+}
+
+class CameraScreen extends StatefulWidget {
+  final CameraController controller;
+
+  CameraScreen({Key? key, required this.controller}) : super(key: key);
+
+  @override
+  _CameraScreenState createState() => _CameraScreenState();
+}
+
+class _CameraScreenState extends State<CameraScreen> {
+  @override
+  void dispose() {
+    widget.controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Take a Selfie"),
+      ),
+      body: CameraPreview(widget.controller),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          try {
+            final image = await widget.controller.takePicture();
+            // Use the captured image here
+          } catch (e) {
+            print("Error: $e");
+          }
+        },
+        child: Icon(Icons.camera),
+      ),
     );
   }
 }

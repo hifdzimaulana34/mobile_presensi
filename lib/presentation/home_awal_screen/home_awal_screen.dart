@@ -79,7 +79,7 @@ class HomeAwalScreen extends GetWidget<HomeAwalController> {
   /// Navigates to the attendanceInputScreen when the action is triggered.
   onTapEnterUniqueCode() {
     Get.toNamed(
-      AppRoutes.attendanceInputScreen,
+      AppRoutes.homeUniqueCodeScreen,
     );
   }
 }
