@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hifdzi_s_application3/app/routes/app_pages.dart';
 
 import 'core/app_export.dart';
 
@@ -27,8 +28,8 @@ class MyApp extends StatelessWidget {
         fallbackLocale: Locale('en', 'US'),
         title: 'hifdzi_s_application3',
         initialBinding: InitialBindings(),
-        initialRoute: AppRoutes.initialRoute,
-        getPages: AppRoutes.pages,
+        initialRoute: AppPages.INITIAL,
+        getPages: AppPages.routes,
       );
     });
   }
