@@ -1,10 +1,11 @@
 name: hifdzi_s_application3
 description: A new Flutter project.
 version: 1.0.0+1
-environment: 
-  sdk: '>=2.12.0 <3.0.0'
-dependencies: 
-  flutter: 
+environment:
+  # sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=3.2.1 <4.0.0"
+dependencies:
+  flutter:
     sdk: flutter
   get: ^4.6.6
   connectivity_plus: ^5.0.2
@@ -19,27 +20,30 @@ dependencies:
   fluttertoast: ^8.2.4
   path_provider: ^2.0.2
   gallery_saver_plus: ^3.0.1
-dev_dependencies: 
-  flutter_test: 
+  dio: ^5.4.3+1
+  flutter_dotenv: ^5.1.0
+dev_dependencies:
+  flutter_test:
     sdk: flutter
-flutter: 
+flutter:
   uses-material-design: true
-  assets: 
+  assets:
     - assets/
     - assets/images/
-  fonts: 
+    - .env
+  fonts:
     - family: Inika
-      fonts: 
+      fonts:
         - asset: assets/fonts/InikaBold.ttf
           weight: 700
     - family: Roboto
-      fonts: 
+      fonts:
         - asset: assets/fonts/RobotoRomanRegular.ttf
           weight: 400
         - asset: assets/fonts/RobotoItalicRegular.ttf
           weight: 400
     - family: Tajawal
-      fonts: 
+      fonts:
         - asset: assets/fonts/TajawalRegular.ttf
           weight: 400
         - asset: assets/fonts/TajawalBold.ttf
@@ -49,6 +53,6 @@ flutter:
         - asset: assets/fonts/TajawalBlack.ttf
           weight: 900
     - family: Inknut Antiqua
-      fonts: 
+      fonts:
         - asset: assets/fonts/InknutAntiquaBold.ttf
           weight: 700
