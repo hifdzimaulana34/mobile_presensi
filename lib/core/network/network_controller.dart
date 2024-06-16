@@ -30,7 +30,11 @@ class NetworkController extends GetxController {
     }
   }
 
-  Future<dynamic> post(String path) async {
+  Future<dynamic> post(
+    String path, {
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? param,
+  }) async {
     bool isConnect = false;
     final res = await checkConnection();
     isConnect = res.isConnected;
@@ -39,7 +43,15 @@ class NetworkController extends GetxController {
     }
 
     try {
-      Response res = await _dio.post(path);
+      Response res = await _dio.post(
+        path,
+        data: body,
+        queryParameters: param,
+        options: Options(
+          contentType: 'application/json',
+          // headers: {},
+        ),
+      );
       return res;
     } on DioException {
       rethrow;
