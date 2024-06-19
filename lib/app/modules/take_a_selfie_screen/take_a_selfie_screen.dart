@@ -1,61 +1,88 @@
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:gallery_saver_plus/gallery_saver.dart';
-import 'package:hifdzi_s_application3/app/routes/app_pages.dart';
+import 'package:hifdzi_s_application3/app/modules/take_a_selfie_screen/controller/take_a_selfie_controller.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
-import 'package:hifdzi_s_application3/core/utils/function_utils.dart';
 import 'package:hifdzi_s_application3/widgets/custom_elevated_button.dart';
-import 'package:permission_handler/permission_handler.dart';
 
-class TakeASelfieScreen extends StatelessWidget {
+class TakeASelfieScreen extends GetView<TakeASelfieController> {
   TakeASelfieScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            body: Container(
-              width: double.maxFinite,
-              padding: EdgeInsets.symmetric(vertical: 27.v),
-              child: Column(
-                children: [
-                  SizedBox(height: 26.v),
-                  _buildTakeASelfieSection(),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Container(
-                        width: 102.h,
-                        margin: EdgeInsets.only(left: 43.h),
-                        child: Text(
-                          "msg_monday_at_08_00".tr,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: CustomTextStyles.titleLargeGray50,
-                        ),
-                      ),
+      child: Scaffold(
+        body: Container(
+          width: double.maxFinite,
+          padding: EdgeInsets.symmetric(vertical: 27.v),
+          child: Column(
+            children: [
+              SizedBox(height: 26.v),
+              _buildTakeASelfieSection(),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Container(
+                    width: 102.h,
+                    margin: EdgeInsets.only(left: 43.h),
+                    child: Text(
+                      "msg_monday_at_08_00".tr,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: CustomTextStyles.titleLargeGray50,
                     ),
                   ),
-                  SizedBox(height: 10.v),
-                  _buildProfileSection(context)
-                ],
+                ),
               ),
-            ),
-            bottomNavigationBar: _buildSaveSection()));
+              SizedBox(height: 10.v),
+              _buildProfileSection(context)
+              // GestureDetector(
+              //   onTap: () {
+              //     controller.selectImage();
+              //   },
+              //   child: Obx(
+              //     () => Container(
+              //       height: 300,
+              //       width: 300,
+              //       color: Colors.lightBlue,
+              //       child: controller.imagePath.value != ''
+              //           ? Image.file(
+              //               File(
+              //                 controller.imagePath.value,
+              //               ),
+              //             )
+              //           : null,
+              //     ),
+              //   ),
+              // ),
+            ],
+          ),
+        ),
+        bottomNavigationBar: CustomElevatedButton(
+          height: 53.v,
+          width: 176.h,
+          text: "lbl_save".tr,
+          margin: EdgeInsets.only(left: 92.h, right: 92.h, bottom: 55.v),
+          buttonStyle: CustomButtonStyles.fillWhiteA,
+          buttonTextStyle: CustomTextStyles.headlineSmallBlack900,
+          onPressed: () {
+            // controller.onTapSaveSection();
+            controller.testIdentifika();
+          },
+        ),
+      ),
+    );
   }
 
   Widget _buildProfileSection(BuildContext context) {
     return FutureBuilder<bool>(
-      future: _checkCameraPermission(),
+      future: controller.checkCameraPermission(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         } else if (snapshot.data == true) {
           return GestureDetector(
-            onTap: () => _openCamera(context),
+            onTap: () => controller.openCamera(context),
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 33),
               padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
@@ -66,14 +93,14 @@ class TakeASelfieScreen extends StatelessWidget {
               ),
               width: 250,
               height: 250,
-              child: FutureBuilder<void>(
-                future: _initializeCamera(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done && _controller != null) {
-                    return CameraPreview(_controller!);
-                  } else {
-                    return Center(child: CircularProgressIndicator());
+              child: GetBuilder<TakeASelfieController>(
+                init: TakeASelfieController(),
+                initState: (_) {},
+                builder: (_) {
+                  if (controller.cameraController == null) {
+                    return CircularProgressIndicator();
                   }
+                  return CameraPreview(controller.cameraController!);
                 },
               ),
             ),
@@ -118,98 +145,6 @@ class TakeASelfieScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSaveSection() {
-    return CustomElevatedButton(
-      height: 53.v,
-      width: 176.h,
-      text: "lbl_save".tr,
-      margin: EdgeInsets.only(left: 92.h, right: 92.h, bottom: 55.v),
-      buttonStyle: CustomButtonStyles.fillWhiteA,
-      buttonTextStyle: CustomTextStyles.headlineSmallBlack900,
-      onPressed: () {
-        onTapSaveSection();
-      },
-    );
-  }
-
-  /// Navigates to the homeUniqueCodeScreen when the action is triggered.
-  Future<void> onTapSaveSection() async {
-    if (_controller != null && _controller!.value.isInitialized) {
-      try {
-        final XFile imageXFile = await _controller!.takePicture();
-        var temp = File(imageXFile.path);
-        var path = temp.path;
-        var lastSeparator = path.lastIndexOf(Platform.pathSeparator);
-        final String fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
-        var newPath = path.substring(0, lastSeparator + 1) + fileName;
-        temp = await temp.rename(newPath);
-
-        // imageXFile.saveTo(imageXFile.path);
-        // final File imageFile = File(imageXFile.path);
-        // final dir = path.dirname(imageXFile.path);
-        // final newName = path.join(dir,'${DateTime.now().millisecondsSinceEpoch}.jpg');
-        // await imageFile.rename(newName);
-
-        // final String directoryPath = 'lib/images';
-        // var directoryPath = await getApplicationDocumentsDirectory();
-
-        // Directory imagesDirectory = Directory(directoryPath.path);
-        // if (!imagesDirectory.existsSync()) {
-        //   imagesDirectory.createSync(recursive: true);
-        // }
-
-        final res = await GallerySaver.saveImage(temp.path);
-        // final String imagePath = '${directoryPath.path}/$fileName';
-
-        // final File savedImage = File(imagePath);
-        // await savedImage.writeAsBytes(await imageFile.readAsBytes());
-
-        // print('Image saved successfully at: $imagePath');
-        logKey('success', 'iamge saved at $res');
-
-        // Get.toNamed(AppRoutes.homeUniqueCodeScreen);
-        Get.toNamed(Routes.HOME_UNIQUE_CODE_SCREEN);
-      } catch (e) {
-        logKey('Error taking picture: $e');
-      }
-    } else {
-      // Camera controller is not initialized or not in the correct state
-      // Handle this case appropriately, e.g., show an error message
-    }
-  }
-
-  late CameraController? _controller;
-
-  Future<void> _initializeCamera() async {
-    final cameras = await availableCameras();
-    final frontCam = cameras[1];
-    _controller = CameraController(
-      frontCam,
-      ResolutionPreset.medium,
-    );
-    await _controller!.initialize();
-  }
-
-  Future<bool> _checkCameraPermission() async {
-    var status = await Permission.camera.status;
-    if (status.isDenied) {
-      status = await Permission.camera.request();
-      if (status.isDenied) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  void _openCamera(BuildContext context) async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CameraScreen(controller: _controller!),
       ),
     );
   }

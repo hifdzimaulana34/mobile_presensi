@@ -2,6 +2,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
 
+import '../utils/environtment.dart';
+
 class NetworkController extends GetxController {
   final Dio _dio = Dio();
 
@@ -32,7 +34,7 @@ class NetworkController extends GetxController {
 
   Future<dynamic> post(
     String path, {
-    Map<String, dynamic>? body,
+    Object? body,
     Map<String, dynamic>? param,
   }) async {
     bool isConnect = false;
@@ -48,8 +50,11 @@ class NetworkController extends GetxController {
         data: body,
         queryParameters: param,
         options: Options(
-          contentType: 'application/json',
-          // headers: {},
+          // contentType: 'application/json',
+          contentType: 'multipart/form-data',
+          headers: {
+            'e-face-api-key': '$tokenIdentifika',
+          },
         ),
       );
       return res;

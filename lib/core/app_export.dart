@@ -1,5 +1,5 @@
 export 'package:connectivity_plus/connectivity_plus.dart';
-export 'package:get/get.dart' hide Response;
+export 'package:get/get.dart' hide Response, FormData, MultipartFile;
 export 'package:hifdzi_s_application3/core/errors/exceptions.dart';
 export 'package:hifdzi_s_application3/core/network/network_info.dart';
 export 'package:hifdzi_s_application3/core/utils/date_time_utils.dart';
