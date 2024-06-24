@@ -6,6 +6,8 @@ import '../modules/attendance_history_screen/attendance_history_screen.dart';
 import '../modules/attendance_history_screen/binding/attendance_history_binding.dart';
 import '../modules/attendance_input_screen/attendance_input_screen.dart';
 import '../modules/attendance_input_screen/binding/attendance_input_binding.dart';
+import '../modules/attendance_permit/bindings/attendance_permit_binding.dart';
+import '../modules/attendance_permit/views/attendance_permit_view.dart';
 import '../modules/edit_profile_screen/binding/edit_profile_binding.dart';
 import '../modules/edit_profile_screen/edit_profile_screen.dart';
 import '../modules/forgot_password_screen/binding/forgot_password_binding.dart';
@@ -37,7 +39,7 @@ class AppPages {
   AppPages._();
 
   // static const INITIAL = Routes.SPLASH_SCREEN;
-  static const INITIAL = Routes.TAKE_A_SELFIE_SCREEN;
+  static const INITIAL = Routes.HOME_UNIQUE_CODE_SCREEN;
 
   static final routes = [
     GetPage(
@@ -152,5 +154,10 @@ class AppPages {
     //     SplashBinding(),
     //   ],
     // )
+    GetPage(
+      name: _Paths.ATTENDANCE_PERMIT,
+      page: () => const AttendancePermitView(),
+      binding: AttendancePermitBinding(),
+    ),
   ];
 }

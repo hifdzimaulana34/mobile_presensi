@@ -19,6 +19,7 @@ abstract class Routes {
   static const MY_PROFILE_SCREEN = _Paths.MY_PROFILE_SCREEN;
   static const EDIT_PROFILE_SCREEN = _Paths.EDIT_PROFILE_SCREEN;
   static const APP_NAVIGATION_SCREEN = _Paths.APP_NAVIGATION_SCREEN;
+  static const ATTENDANCE_PERMIT = _Paths.ATTENDANCE_PERMIT;
 }
 
 abstract class _Paths {
@@ -55,4 +56,5 @@ abstract class _Paths {
   static const APP_NAVIGATION_SCREEN = '/app_navigation_screen';
 
   // static const initialRoute = '/initialRoute';
+  static const ATTENDANCE_PERMIT = '/attendance-permit';
 }

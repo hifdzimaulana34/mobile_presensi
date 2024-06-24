@@ -11,70 +11,74 @@ class HomeUniqueCodeScreen extends GetWidget<HomeUniqueCodeController> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            body: Container(
-                width: double.maxFinite,
-                padding: EdgeInsets.symmetric(horizontal: 18.h, vertical: 42.v),
-                child: Column(children: [
-                  _buildProfileImage(),
-                  SizedBox(height: 19.v),
-                  Container(
-                      width: 235.h,
-                      margin: EdgeInsets.symmetric(horizontal: 44.h),
-                      child: Text("msg_enjoy_the_facial".tr,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.titleLarge)),
-                  SizedBox(height: 70.v),
-                  CustomElevatedButton(
-                      height: 50.v,
-                      text: "msg_attendance_input".tr,
-                      margin: EdgeInsets.only(left: 30.h, right: 29.h),
-                      buttonTextStyle: CustomTextStyles.titleLargeBlack900Black,
-                      onPressed: () {
-                        onTapAttendanceInput();
-                      }),
-                  SizedBox(height: 37.v),
-                  CustomElevatedButton(
-                      height: 50.v,
-                      text: "msg_attendance_history".tr,
-                      margin: EdgeInsets.only(left: 30.h, right: 29.h),
-                      buttonTextStyle: CustomTextStyles.titleLargeBlack900Black,
-                      onPressed: () {
-                        onTapAttendanceHistory();
-                      }),
-                  SizedBox(height: 5.v)
-                ]))));
+      child: Scaffold(
+        body: Container(
+          width: double.maxFinite,
+          padding: EdgeInsets.symmetric(horizontal: 18.h, vertical: 42.v),
+          child: Column(
+            children: [
+              _buildProfileImage(),
+              SizedBox(height: 19.v),
+              Container(
+                  width: 235.h,
+                  margin: EdgeInsets.symmetric(horizontal: 44.h),
+                  child: Text("msg_enjoy_the_facial".tr,
+                      maxLines: 2, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: theme.textTheme.titleLarge)),
+              SizedBox(height: 70.v),
+              CustomElevatedButton(
+                  height: 50.v,
+                  text: "msg_attendance_input".tr,
+                  margin: EdgeInsets.only(left: 30.h, right: 29.h),
+                  buttonTextStyle: CustomTextStyles.titleLargeBlack900Black,
+                  onPressed: () {
+                    onTapAttendanceInput();
+                  }),
+              SizedBox(height: 37.v),
+              CustomElevatedButton(
+                  height: 50.v,
+                  text: "msg_attendance_history".tr,
+                  margin: EdgeInsets.only(left: 30.h, right: 29.h),
+                  buttonTextStyle: CustomTextStyles.titleLargeBlack900Black,
+                  onPressed: () {
+                    onTapAttendanceHistory();
+                  }),
+              SizedBox(height: 37.v),
+              CustomElevatedButton(
+                height: 50.v,
+                // text: "msg_attendance_history".tr,
+                text: 'Attendance Permit',
+                margin: EdgeInsets.only(left: 30.h, right: 29.h),
+                buttonTextStyle: CustomTextStyles.titleLargeBlack900Black,
+                onPressed: onTapAttendancePermit,
+              ),
+              SizedBox(height: 5.v)
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   /// Section Widget
   Widget _buildProfileImage() {
     return Padding(
         padding: EdgeInsets.only(right: 4.h),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomImageView(
-                  imagePath: ImageConstant.imgProfileFreeVe,
-                  height: 139.adaptSize,
-                  width: 139.adaptSize,
-                  onTap: () {
-                    onTapImgProfileFreeVe();
-                  }),
-              Padding(
-                  padding: EdgeInsets.only(top: 32.v, bottom: 53.v),
-                  child: Column(children: [
-                    Text("lbl_hi_amirul_yusuf".tr,
-                        style: CustomTextStyles.headlineSmallTajawalMedium),
-                    SizedBox(height: 3.v),
-                    Text("lbl_polinema2".tr,
-                        textAlign: TextAlign.center,
-                        style: CustomTextStyles
-                            .titleSmallTajawalOnPrimaryContainer)
-                  ]))
-            ]));
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          CustomImageView(
+              imagePath: ImageConstant.imgProfileFreeVe,
+              height: 139.adaptSize,
+              width: 139.adaptSize,
+              onTap: () {
+                onTapImgProfileFreeVe();
+              }),
+          Padding(
+              padding: EdgeInsets.only(top: 32.v, bottom: 53.v),
+              child: Column(children: [
+                Text("lbl_hi_amirul_yusuf".tr, style: CustomTextStyles.headlineSmallTajawalMedium),
+                SizedBox(height: 3.v),
+                Text("lbl_polinema2".tr, textAlign: TextAlign.center, style: CustomTextStyles.titleSmallTajawalOnPrimaryContainer)
+              ]))
+        ]));
   }
 
   /// Navigates to the myProfileScreen when the action is triggered.
@@ -96,5 +100,9 @@ class HomeUniqueCodeScreen extends GetWidget<HomeUniqueCodeController> {
     Get.toNamed(
       Routes.ATTENDANCE_HISTORY_SCREEN,
     );
+  }
+
+  void onTapAttendancePermit() {
+    Get.toNamed(Routes.ATTENDANCE_PERMIT);
   }
 }
