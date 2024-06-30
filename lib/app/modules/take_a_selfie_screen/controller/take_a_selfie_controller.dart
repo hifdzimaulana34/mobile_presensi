@@ -4,6 +4,8 @@ import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver_plus/gallery_saver.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
 import 'package:hifdzi_s_application3/core/network/network_controller.dart';
 import 'package:hifdzi_s_application3/core/utils/function_utils.dart';
@@ -28,10 +30,7 @@ class TakeASelfieController extends GetxController {
 
   var imagePath = ''.obs;
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
+  void initialFunction() async {
     isLoading.listen((v) {
       if (v) {
         dialogLoading();
@@ -39,7 +38,15 @@ class TakeASelfieController extends GetxController {
         Get.back();
       }
     });
-    initializeCamera();
+    await initializeCamera();
+    await graintLocationAccess();
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    initialFunction();
   }
 
   @override
@@ -53,6 +60,29 @@ class TakeASelfieController extends GetxController {
     // TODO: implement onClose
     super.onClose();
     cameraController!.dispose();
+  }
+
+  Future<List<Placemark>?> getLocation() async {
+    try {
+      final location = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      logKey('location', location.toJson());
+      final address = getAddress(location.latitude, location.longitude);
+      return address;
+    } catch (e) {
+      logKey('error getLocation', e);
+      return null;
+    }
+  }
+
+  Future<List<Placemark>?> getAddress(lat, long) async {
+    try {
+      final res = await placemarkFromCoordinates(lat, long);
+      return res;
+      logKey('res getAddress', res);
+    } catch (e) {
+      logKey('error getAddress', getAddress);
+      return null;
+    }
   }
 
   /// Navigates to the homeUniqueCodeScreen when the action is triggered.
@@ -98,6 +128,16 @@ class TakeASelfieController extends GetxController {
     } else {
       // Camera controller is not initialized or not in the correct state
       // Handle this case appropriately, e.g., show an error message
+    }
+  }
+
+  Future<void> graintLocationAccess() async {
+    final status = await Permission.location.status;
+    logKey(status);
+    if (!status.isGranted) {
+      final newStatus = await Permission.location.request();
+      logKey(newStatus);
+      return;
     }
   }
 
@@ -187,7 +227,7 @@ class TakeASelfieController extends GetxController {
     }
   }
 
-  Future<void> faceVerification(String identifier, String imagePath) async {
+  Future<Map<String, dynamic>?> faceVerification(String identifier, String imagePath) async {
     var formData = FormData.fromMap({
       'image': MultipartFile.fromFileSync(imagePath),
       // 'image': MultipartFile.fromBytes(await imageData.readAsBytes()),
@@ -195,16 +235,20 @@ class TakeASelfieController extends GetxController {
     });
     try {
       final Response res = await networkC.post(
-        'http://identifika.ramadani.site/face_verification',
+        // 'http://identifika.ramadani.site/face_verification',
+        'https://api.ramadani.site/face_verification',
         body: formData,
       );
       logKey('res faceVerification', res.data);
+      return res.data;
     } on DioException catch (e) {
       logKey('error faceVerification', e.response?.data);
       logKey('error faceVerification', e.requestOptions.data);
       logKey('error faceVerification', e.requestOptions.headers);
+      return null;
     } catch (e) {
       print('error $e');
+      return null;
     }
   }
 
@@ -215,15 +259,18 @@ class TakeASelfieController extends GetxController {
     });
     try {
       final Response res = await networkC.post(
-        'http://identifika.ramadani.site/face_recognition',
+        // 'http://identifika.ramadani.site/face_recognition',
+        'https://api.ramadani.site/face_recognition',
+        // 'http://34.67.246.232:3000/face_recognition',
         body: formData,
       );
-      logKey('res faceVerification', res.data);
+      logKey('res faceRecog', res.data);
       return res.data;
     } on DioException catch (e) {
       logKey('error faceRecog', e.response?.data);
       logKey('error faceRecog', e.requestOptions.data);
       logKey('error faceRecog', e.requestOptions.headers);
+      logKey('error faceRecog', e.message);
       return null;
     } catch (e) {
       print('error $e');
@@ -233,16 +280,63 @@ class TakeASelfieController extends GetxController {
 
   Future<void> testIdentifika() async {
     isLoading.value = true;
+    final location = await getLocation();
+    if (location == null) {
+      isLoading.value = false;
+      Get.defaultDialog(
+        backgroundColor: Get.theme.primaryColor,
+        middleText: 'Tidak bisa mendapatkan lokasi',
+      );
+      return;
+    }
     final imageData = await getCameraImage();
     if (imageData == null) {
+      isLoading.value = false;
       return null;
     }
     final res = await faceRecog(imageData.path);
     if (res == null || !res['result']['verified']) {
       isLoading.value = false;
+      Get.defaultDialog(
+        backgroundColor: Get.theme.primaryColor,
+        middleText: 'Error face recog',
+      );
       return;
     }
-    await faceVerification(res['result']['user']['_id'], imageData.path);
+    final resVerif = await faceVerification(res['result']['user']['_id'], imageData.path);
+    logKey('resVerif zxc', resVerif);
     isLoading.value = false;
+    if (resVerif == null) {
+      Get.defaultDialog(
+        backgroundColor: Get.theme.primaryColor,
+        middleText: 'Error face verification',
+      );
+      return;
+    }
+    if (!resVerif['result']['verified']) {
+      Get.defaultDialog(
+        backgroundColor: Get.theme.primaryColor,
+        middleText: 'Error face verification - not verified',
+      );
+      return;
+    }
+    Get.defaultDialog(
+      backgroundColor: Get.theme.primaryColor,
+      title: 'Berhasil',
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Nama : ${res['result']['user']['user_name']}',
+            style: theme.textTheme.headlineSmall,
+          ),
+          Text(
+            'Alamat : ${location.first.street ?? ''}',
+            style: theme.textTheme.headlineSmall,
+          ),
+        ],
+      ),
+    );
   }
 }

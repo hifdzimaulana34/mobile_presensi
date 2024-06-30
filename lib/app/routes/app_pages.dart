@@ -39,7 +39,7 @@ class AppPages {
   AppPages._();
 
   // static const INITIAL = Routes.SPLASH_SCREEN;
-  static const INITIAL = Routes.ATTENDANCE_HISTORY_SCREEN;
+  static const INITIAL = Routes.TAKE_A_SELFIE_SCREEN;
 
   static final routes = [
     GetPage(
