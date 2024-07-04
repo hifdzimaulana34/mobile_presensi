@@ -8,6 +8,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
 import 'package:hifdzi_s_application3/core/network/network_controller.dart';
+import 'package:hifdzi_s_application3/core/utils/environtment.dart';
 import 'package:hifdzi_s_application3/core/utils/function_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -230,13 +231,11 @@ class TakeASelfieController extends GetxController {
   Future<Map<String, dynamic>?> faceVerification(String identifier, String imagePath) async {
     var formData = FormData.fromMap({
       'image': MultipartFile.fromFileSync(imagePath),
-      // 'image': MultipartFile.fromBytes(await imageData.readAsBytes()),
       'identifier': identifier,
     });
     try {
       final Response res = await networkC.post(
-        // 'http://identifika.ramadani.site/face_verification',
-        'https://api.ramadani.site/face_verification',
+        urlIdentifika,
         body: formData,
       );
       logKey('res faceVerification', res.data);
@@ -254,14 +253,11 @@ class TakeASelfieController extends GetxController {
 
   Future<Map<String, dynamic>?> faceRecog(String imagePath) async {
     var formData = FormData.fromMap({
-      // 'image': MultipartFile.fromFileSync(imagePath.value),
       'image': MultipartFile.fromFileSync(imagePath),
     });
     try {
       final Response res = await networkC.post(
-        // 'http://identifika.ramadani.site/face_recognition',
-        'https://api.ramadani.site/face_recognition',
-        // 'http://34.67.246.232:3000/face_recognition',
+        urlIdentifika,
         body: formData,
       );
       logKey('res faceRecog', res.data);

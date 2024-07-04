@@ -21,6 +21,7 @@
 
     <application
         android:label="hifdzi_s_application3"
+        android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

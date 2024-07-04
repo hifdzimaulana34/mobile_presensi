@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hifdzi_s_application3/app/routes/app_pages.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
 import 'package:hifdzi_s_application3/widgets/custom_elevated_button.dart';
 
@@ -34,36 +33,22 @@ class WelcomeScreen extends GetWidget<WelcomeController> {
                   text: "lbl_log_in".tr,
                   margin: EdgeInsets.symmetric(horizontal: 9.h),
                   onPressed: () {
-                    onTapLOGIN();
+                    controller.onTapLOGIN();
                   }),
-              SizedBox(height: 38.v),
-              CustomElevatedButton(
-                  text: "lbl_sign_up".tr,
-                  margin: EdgeInsets.symmetric(horizontal: 9.h),
-                  buttonStyle: CustomButtonStyles.fillOnPrimaryContainer,
-                  buttonTextStyle: CustomTextStyles.titleLargeInikaBlack900,
-                  onPressed: () {
-                    onTapSIGNUP();
-                  }),
-              SizedBox(height: 5.v)
+              // SizedBox(height: 38.v),
+              // CustomElevatedButton(
+              //     text: "lbl_sign_up".tr,
+              //     margin: EdgeInsets.symmetric(horizontal: 9.h),
+              //     buttonStyle: CustomButtonStyles.fillOnPrimaryContainer,
+              //     buttonTextStyle: CustomTextStyles.titleLargeInikaBlack900,
+              //     onPressed: () {
+              //       onTapSIGNUP();
+              //     }),
+              // SizedBox(height: 5.v)
             ],
           ),
         ),
       ),
-    );
-  }
-
-  /// Navigates to the loginScreen when the action is triggered.
-  onTapLOGIN() {
-    Get.toNamed(
-      Routes.LOGIN_SCREEN,
-    );
-  }
-
-  /// Navigates to the signUpScreen when the action is triggered.
-  onTapSIGNUP() {
-    Get.toNamed(
-      Routes.SIGN_UP_SCREEN,
     );
   }
 }

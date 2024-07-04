@@ -1,0 +1,58 @@
+import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide Response;
+import 'package:get_storage/get_storage.dart';
+import 'package:hifdzi_s_application3/data/models/user.dart';
+
+import 'network/network_controller.dart';
+import 'utils/environtment.dart';
+import 'utils/function_utils.dart';
+
+class SessionController extends GetxController {
+  final box = GetStorage();
+  final user = User.empty().obs;
+  final networkC = Get.find<NetworkController>();
+
+  Future<User?> getUser() async {
+    try {
+      final Response res = await networkC.get(
+        '$url/auth/user',
+        useAuth: true,
+      );
+      if (!res.data['success']) {
+        return null;
+      }
+      user.value = User.fromJson(res.data['data']);
+      logKey('user', user.value.toJson());
+      return user.value;
+    } on DioException catch (e) {
+      logKey('error getUser type', e.type);
+      logKey('error getUser', e.response);
+      logKey('error getUser message', e.message);
+      if (e.response?.data['message'] == 'Unauthenticated') {
+        await box.remove('token');
+        await Get.snackbar('Session Expired', '');
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+  }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+  }
+}
