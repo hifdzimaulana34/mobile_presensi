@@ -59,7 +59,7 @@ class LoginController extends GetxController {
 
       Get.snackbar(
         'Error Login',
-        e.response?.data['message'] ?? '',
+        '${e.response?.data['message'] ?? ''}',
       );
       return false;
     } catch (e) {
