@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
+import 'package:hifdzi_s_application3/core/session_controller.dart';
 
 import '../models/my_profile_model.dart';
 
@@ -25,6 +26,8 @@ class MyProfileController extends GetxController {
   Rx<MyProfileModel> myProfileModelObj = MyProfileModel().obs;
 
   Rx<bool> isShowPassword = true.obs;
+
+  final networkC = Get.find<SessionController>();
 
   @override
   void onClose() {

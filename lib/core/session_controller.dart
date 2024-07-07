@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:get_storage/get_storage.dart';
+import 'package:hifdzi_s_application3/app/routes/app_pages.dart';
 import 'package:hifdzi_s_application3/data/models/user.dart';
 
 import 'network/network_controller.dart';
@@ -35,6 +36,21 @@ class SessionController extends GetxController {
       return null;
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      final Response res = await networkC.post(
+        '$url/auth/logout',
+        isFormData: false,
+        useAuth: true,
+      );
+      logKey('res logout', res.data);
+      await box.remove('token');
+      Get.offAllNamed(Routes.LOGIN_SCREEN);
+    } on DioException catch (e) {
+      logKey('error logout', e.response);
     }
   }
 

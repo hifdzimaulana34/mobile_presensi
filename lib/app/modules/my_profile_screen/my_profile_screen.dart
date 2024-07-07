@@ -16,187 +16,174 @@ class MyProfileScreen extends GetWidget<MyProfileController> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: SizedBox(
-                width: SizeUtils.width,
-                child: SingleChildScrollView(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: Form(
-                        key: _formKey,
-                        child: Container(
-                            width: double.maxFinite,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12.h, vertical: 34.v),
-                            child: Column(children: [
-                              Text("lbl_my_profile".tr,
-                                  style: theme.textTheme.headlineLarge),
-                              SizedBox(height: 4.v),
-                              SizedBox(
-                                  height: 120.v,
-                                  width: 131.h,
-                                  child: Stack(
-                                      alignment: Alignment.bottomRight,
-                                      children: [
-                                        CustomImageView(
-                                            imagePath:
-                                                ImageConstant.imgProfileFreeVe,
-                                            height: 120.v,
-                                            width: 119.h,
-                                            alignment: Alignment.centerLeft),
-                                        Align(
-                                            alignment: Alignment.bottomRight,
-                                            child: Container(
-                                                height: 38.v,
-                                                width: 50.h,
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 6.h,
-                                                    vertical: 7.v),
-                                                decoration: AppDecoration
-                                                    .fillOnPrimaryContainer
-                                                    .copyWith(
-                                                        borderRadius:
-                                                            BorderRadiusStyle
-                                                                .roundedBorder10),
-                                                child: CustomImageView(
-                                                    imagePath:
-                                                        ImageConstant.imgCamera,
-                                                    height: 24.v,
-                                                    width: 38.h,
-                                                    alignment:
-                                                        Alignment.center)))
-                                      ])),
-                              SizedBox(height: 15.v),
-                              SizedBox(
-                                  height: 372.v,
-                                  width: 334.h,
-                                  child: Stack(
-                                      alignment: Alignment.topRight,
-                                      children: [
-                                        Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 7.h,
-                                                    vertical: 14.v),
-                                                decoration: AppDecoration
-                                                    .fillPrimary
-                                                    .copyWith(
-                                                        borderRadius:
-                                                            BorderRadiusStyle
-                                                                .roundedBorder10),
-                                                child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      SizedBox(height: 4.v),
-                                                      _buildProfileStack(),
-                                                      SizedBox(height: 18.v),
-                                                      _buildNameRow(),
-                                                      SizedBox(height: 15.v),
-                                                      _buildDateOfBirthRow(),
-                                                      SizedBox(height: 18.v),
-                                                      _buildPhoneNumberRow(),
-                                                      SizedBox(height: 17.v),
-                                                      _buildOccupationRow(),
-                                                      SizedBox(height: 18.v),
-                                                      _buildEmailRow(),
-                                                      SizedBox(height: 17.v),
-                                                      _buildPasswordRow()
-                                                    ]))),
-                                        Padding(
-                                            padding:
-                                                EdgeInsets.only(right: 7.h),
-                                            child: CustomIconButton(
-                                                height: 34.v,
-                                                width: 43.h,
-                                                padding: EdgeInsets.all(5.h),
-                                                alignment: Alignment.topRight,
-                                                onTap: () {
-                                                  onTapBtnEdit();
-                                                },
-                                                child: CustomImageView(
-                                                    imagePath: ImageConstant
-                                                        .imgEditBlack900)))
-                                      ])),
-                              SizedBox(height: 5.v)
-                            ])))))));
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SizedBox(
+          width: SizeUtils.width,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Form(
+              key: _formKey,
+              child: Container(
+                width: double.maxFinite,
+                padding: EdgeInsets.symmetric(horizontal: 12.h, vertical: 34.v),
+                child: Column(
+                  children: [
+                    Text("lbl_my_profile".tr, style: theme.textTheme.headlineLarge),
+                    SizedBox(height: 4.v),
+                    SizedBox(
+                      height: 120.v,
+                      width: 131.h,
+                      child: Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          CustomImageView(imagePath: ImageConstant.imgProfileFreeVe, height: 120.v, width: 119.h, alignment: Alignment.centerLeft),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Container(
+                              height: 38.v,
+                              width: 50.h,
+                              padding: EdgeInsets.symmetric(horizontal: 6.h, vertical: 7.v),
+                              decoration: AppDecoration.fillOnPrimaryContainer.copyWith(borderRadius: BorderRadiusStyle.roundedBorder10),
+                              child: CustomImageView(
+                                imagePath: ImageConstant.imgCamera,
+                                height: 24.v,
+                                width: 38.h,
+                                alignment: Alignment.center,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 15.v),
+                    SizedBox(
+                      height: 372.v,
+                      width: 334.h,
+                      child: Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 7.h, vertical: 14.v),
+                              decoration: AppDecoration.fillPrimary.copyWith(borderRadius: BorderRadiusStyle.roundedBorder10),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(height: 4.v),
+                                  _buildProfileStack(),
+                                  SizedBox(height: 18.v),
+                                  _buildNameRow(),
+                                  SizedBox(height: 15.v),
+                                  _buildDateOfBirthRow(),
+                                  SizedBox(height: 18.v),
+                                  _buildPhoneNumberRow(),
+                                  SizedBox(height: 17.v),
+                                  _buildOccupationRow(),
+                                  SizedBox(height: 18.v),
+                                  _buildEmailRow(),
+                                  SizedBox(height: 17.v),
+                                  _buildPasswordRow(),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.only(right: 7.h),
+                              child: CustomIconButton(
+                                  height: 34.v,
+                                  width: 43.h,
+                                  padding: EdgeInsets.all(5.h),
+                                  alignment: Alignment.topRight,
+                                  onTap: () {
+                                    onTapBtnEdit();
+                                  },
+                                  child: CustomImageView(imagePath: ImageConstant.imgEditBlack900))),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 5.v),
+                    GestureDetector(
+                      onTap: () {
+                        controller.networkC.logout();
+                      },
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Center(
+                          child: Text('Logout'),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   /// Section Widget
   Widget _buildProfileImage() {
-    return CustomTextFormField(
-        width: 191.h,
-        controller: controller.profileImageController,
-        hintText: "lbl_amirul_yusuf".tr);
+    return CustomTextFormField(width: 191.h, controller: controller.profileImageController, hintText: "lbl_amirul_yusuf".tr);
   }
 
   /// Section Widget
   Widget _buildProfileStack() {
     return Padding(
-        padding: EdgeInsets.only(left: 5.h),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(top: 3.v, bottom: 6.v),
-                  child:
-                      Text("lbl_nama".tr, style: theme.textTheme.titleSmall)),
-              _buildProfileImage()
-            ]));
+      padding: EdgeInsets.only(left: 5.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(padding: EdgeInsets.only(top: 3.v, bottom: 6.v), child: Text("lbl_nama".tr, style: theme.textTheme.titleSmall)),
+          _buildProfileImage(),
+        ],
+      ),
+    );
   }
 
   /// Section Widget
   Widget _buildGenderValue() {
-    return CustomTextFormField(
-        width: 191.h,
-        controller: controller.genderValueController,
-        hintText: "lbl_male".tr);
+    return CustomTextFormField(width: 191.h, controller: controller.genderValueController, hintText: "lbl_male".tr);
   }
 
   /// Section Widget
   Widget _buildNameRow() {
     return Padding(
-        padding: EdgeInsets.only(left: 5.h),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(bottom: 10.v),
-                  child: Text("lbl_gender2".tr,
-                      style: theme.textTheme.titleSmall)),
-              _buildGenderValue()
-            ]));
+      padding: EdgeInsets.only(left: 5.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(padding: EdgeInsets.only(bottom: 10.v), child: Text("lbl_gender2".tr, style: theme.textTheme.titleSmall)),
+          _buildGenderValue(),
+        ],
+      ),
+    );
   }
 
   /// Section Widget
   Widget _buildDateOfBirth() {
-    return CustomTextFormField(
-        width: 191.h,
-        controller: controller.dateOfBirthController,
-        hintText: "msg_03_december_2000".tr);
+    return CustomTextFormField(width: 191.h, controller: controller.dateOfBirthController, hintText: "msg_03_december_2000".tr);
   }
 
   /// Section Widget
   Widget _buildDateOfBirthRow() {
     return Padding(
-        padding: EdgeInsets.only(left: 5.h),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(bottom: 9.v),
-                  child: Text("lbl_date_of_birth2".tr,
-                      style: theme.textTheme.titleSmall)),
-              _buildDateOfBirth()
-            ]));
+      padding: EdgeInsets.only(left: 5.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(padding: EdgeInsets.only(bottom: 9.v), child: Text("lbl_date_of_birth2".tr, style: theme.textTheme.titleSmall)),
+          _buildDateOfBirth(),
+        ],
+      ),
+    );
   }
 
   /// Section Widget
@@ -218,40 +205,25 @@ class MyProfileScreen extends GetWidget<MyProfileController> {
   Widget _buildPhoneNumberRow() {
     return Padding(
         padding: EdgeInsets.only(left: 5.h),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(bottom: 10.v),
-                  child: Text("lbl_phone_number2".tr,
-                      style: theme.textTheme.titleSmall)),
-              _buildPhoneNumber()
-            ]));
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(padding: EdgeInsets.only(bottom: 10.v), child: Text("lbl_phone_number2".tr, style: theme.textTheme.titleSmall)),
+          _buildPhoneNumber()
+        ]));
   }
 
   /// Section Widget
   Widget _buildOccupationValue() {
-    return CustomTextFormField(
-        width: 191.h,
-        controller: controller.occupationValueController,
-        hintText: "msg_indonesian_teacher".tr);
+    return CustomTextFormField(width: 191.h, controller: controller.occupationValueController, hintText: "msg_indonesian_teacher".tr);
   }
 
   /// Section Widget
   Widget _buildOccupationRow() {
     return Padding(
         padding: EdgeInsets.only(left: 5.h),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(top: 1.v, bottom: 8.v),
-                  child: Text("lbl_occupation".tr,
-                      style: theme.textTheme.titleSmall)),
-              _buildOccupationValue()
-            ]));
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(padding: EdgeInsets.only(top: 1.v, bottom: 8.v), child: Text("lbl_occupation".tr, style: theme.textTheme.titleSmall)),
+          _buildOccupationValue()
+        ]));
   }
 
   /// Section Widget
@@ -276,13 +248,7 @@ class MyProfileScreen extends GetWidget<MyProfileController> {
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(bottom: 10.v),
-                  child:
-                      Text("lbl_email2".tr, style: theme.textTheme.titleSmall)),
-              _buildEmail()
-            ]));
+            children: [Padding(padding: EdgeInsets.only(bottom: 10.v), child: Text("lbl_email2".tr, style: theme.textTheme.titleSmall)), _buildEmail()]));
   }
 
   /// Section Widget
@@ -295,15 +261,10 @@ class MyProfileScreen extends GetWidget<MyProfileController> {
         textInputType: TextInputType.visiblePassword,
         suffix: InkWell(
             onTap: () {
-              controller.isShowPassword.value =
-                  !controller.isShowPassword.value;
+              controller.isShowPassword.value = !controller.isShowPassword.value;
             },
             child: Container(
-                margin: EdgeInsets.fromLTRB(30.h, 5.v, 8.h, 5.v),
-                child: CustomImageView(
-                    imagePath: ImageConstant.imgEye,
-                    height: 20.v,
-                    width: 25.h))),
+                margin: EdgeInsets.fromLTRB(30.h, 5.v, 8.h, 5.v), child: CustomImageView(imagePath: ImageConstant.imgEye, height: 20.v, width: 25.h))),
         suffixConstraints: BoxConstraints(maxHeight: 30.v),
         validator: (value) {
           if (value == null || (!isValidPassword(value, isRequired: true))) {
@@ -319,16 +280,10 @@ class MyProfileScreen extends GetWidget<MyProfileController> {
   Widget _buildPasswordRow() {
     return Padding(
         padding: EdgeInsets.only(left: 5.h),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(top: 2.v, bottom: 7.v),
-                  child: Text("lbl_password3".tr,
-                      style: theme.textTheme.titleSmall)),
-              _buildPassword()
-            ]));
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(padding: EdgeInsets.only(top: 2.v, bottom: 7.v), child: Text("lbl_password3".tr, style: theme.textTheme.titleSmall)),
+          _buildPassword()
+        ]));
   }
 
   /// Navigates to the editProfileScreen when the action is triggered.
