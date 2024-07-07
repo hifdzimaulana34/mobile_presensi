@@ -68,7 +68,7 @@ class NetworkController extends GetxController {
     String path, {
     Object? body,
     Map<String, dynamic>? param,
-    bool isIdentifika = false,
+    bool isFormData = false,
     bool useAuth = false,
   }) async {
     bool isConnect = false;
@@ -85,10 +85,10 @@ class NetworkController extends GetxController {
         queryParameters: param,
         options: Options(
           // contentType: 'application/json',
-          contentType: isIdentifika ? 'multipart/form-data' : 'application/json',
+          contentType: isFormData ? 'multipart/form-data' : 'application/json',
           headers: {
-            if (isIdentifika) 'e-face-api-key': '$tokenIdentifika',
-            if (useAuth && !isIdentifika) 'Authorization': 'Bearer ${box.read('token')}',
+            if (isFormData) 'e-face-api-key': '$tokenIdentifika',
+            if (useAuth && !isFormData) 'Authorization': 'Bearer ${box.read('token')}',
           },
           sendTimeout: Duration(minutes: 1),
           receiveTimeout: Duration(minutes: 1),

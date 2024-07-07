@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hifdzi_s_application3/app/routes/app_pages.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
+import 'package:hifdzi_s_application3/core/session_controller.dart';
 import 'package:hifdzi_s_application3/widgets/custom_elevated_button.dart';
 
 import 'controller/home_unique_code_controller.dart';
@@ -13,7 +14,6 @@ class HomeUniqueCodeScreen extends GetWidget<HomeUniqueCodeController> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          width: double.maxFinite,
           padding: EdgeInsets.symmetric(horizontal: 18.h, vertical: 42.v),
           child: Column(
             children: [
@@ -61,24 +61,50 @@ class HomeUniqueCodeScreen extends GetWidget<HomeUniqueCodeController> {
 
   /// Section Widget
   Widget _buildProfileImage() {
-    return Padding(
-        padding: EdgeInsets.only(right: 4.h),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.start, children: [
+    return Align(
+      alignment: Alignment.center,
+      child: Row(
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           CustomImageView(
-              imagePath: ImageConstant.imgProfileFreeVe,
-              height: 139.adaptSize,
-              width: 139.adaptSize,
-              onTap: () {
-                onTapImgProfileFreeVe();
-              }),
-          Padding(
+            imagePath: ImageConstant.imgProfileFreeVe,
+            height: 139.adaptSize,
+            width: 139.adaptSize,
+            onTap: () {
+              onTapImgProfileFreeVe();
+            },
+          ),
+          const SizedBox(width: 15),
+          Expanded(
+            child: Padding(
               padding: EdgeInsets.only(top: 32.v, bottom: 53.v),
-              child: Column(children: [
-                Text("lbl_hi_amirul_yusuf".tr, style: CustomTextStyles.headlineSmallTajawalMedium),
-                SizedBox(height: 3.v),
-                Text("lbl_polinema2".tr, textAlign: TextAlign.center, style: CustomTextStyles.titleSmallTajawalOnPrimaryContainer)
-              ]))
-        ]));
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GetX<SessionController>(
+                    init: SessionController(),
+                    builder: (sessionC) {
+                      return Text(
+                        // "lbl_hi_amirul_yusuf".tr,
+                        sessionC.user.value.name,
+                        style: CustomTextStyles.headlineSmallTajawalMedium,
+                      );
+                    },
+                  ),
+                  SizedBox(height: 3.v),
+                  Text(
+                    "lbl_polinema2".tr,
+                    textAlign: TextAlign.center,
+                    style: CustomTextStyles.titleSmallTajawalOnPrimaryContainer,
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   /// Navigates to the myProfileScreen when the action is triggered.

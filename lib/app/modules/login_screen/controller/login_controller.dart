@@ -82,7 +82,9 @@ class LoginController extends GetxController {
       return;
     }
     Get.back();
-    Get.offNamed(Routes.HOME_AWAL_SCREEN);
+    Get.offNamed(
+      Routes.HOME_UNIQUE_CODE_SCREEN,
+    );
     // String url = 'http://192.168.0.107/testingphp/login.php';
     // var response = await http.post(Uri.parse(url), body: {
     //   "name": name,

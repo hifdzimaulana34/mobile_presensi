@@ -19,7 +19,7 @@ class WelcomeController extends GetxController {
   @override
   void onReady() {
     // TODO: implement onReady
-    final isExpired = Get.arguments['is_ession_expired'] ?? false;
+    final isExpired = Get.arguments?['is_ession_expired'] ?? false;
     super.onReady();
     if (isExpired) {
       Get.snackbar('Session Expired', '');

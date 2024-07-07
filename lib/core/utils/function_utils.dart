@@ -3,6 +3,7 @@ import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 void logKey([key, content]) {
   String finalLog = '';
@@ -23,6 +24,16 @@ void logKey([key, content]) {
     dev.log('$key => $finalLog');
   } else {
     dev.log(finalLog);
+  }
+}
+
+String? testTimeConvert(String stringTime) {
+  try {
+    final dateTime = DateFormat('HH:mm:ss').parse(stringTime);
+    final res = DateFormat('h:mm a').format(dateTime);
+    return res;
+  } catch (e) {
+    return null;
   }
 }
 

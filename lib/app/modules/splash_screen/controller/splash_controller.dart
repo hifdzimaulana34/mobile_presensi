@@ -40,7 +40,7 @@ class SplashController extends GetxController {
     logKey('session token', box.read('token'));
     await Future.delayed(Duration(seconds: 3));
     Get.offNamed(
-      Routes.HOME_AWAL_SCREEN,
+      Routes.HOME_UNIQUE_CODE_SCREEN,
     );
   }
 
