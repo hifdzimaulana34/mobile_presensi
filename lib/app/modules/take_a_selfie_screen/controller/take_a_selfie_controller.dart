@@ -235,8 +235,11 @@ class TakeASelfieController extends GetxController {
     });
     try {
       final Response res = await networkC.post(
-        urlIdentifika,
+        '$urlIdentifika/face_verification',
         body: formData,
+        isFormData: true,
+        isIdentifika: true,
+        useAuth: true,
       );
       logKey('res faceVerification', res.data);
       return res.data;
@@ -257,8 +260,11 @@ class TakeASelfieController extends GetxController {
     });
     try {
       final Response res = await networkC.post(
-        urlIdentifika,
+        '$urlIdentifika/face_recognition',
         body: formData,
+        isFormData: true,
+        isIdentifika: true,
+        useAuth: true,
       );
       logKey('res faceRecog', res.data);
       return res.data;
