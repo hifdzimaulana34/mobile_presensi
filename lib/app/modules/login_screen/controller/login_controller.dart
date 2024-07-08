@@ -53,14 +53,15 @@ class LoginController extends GetxController {
       return true;
     } on DioException catch (e) {
       logKey('error logIn', e.response);
-
+      // logKey('error logIn data', e.response?.data);
       //* ini untuk close dialogLoading
       Get.back();
-
-      Get.snackbar(
-        'Error Login',
-        '${e.response?.data['message'] ?? ''}',
-      );
+      if (e.response?.data != []) {
+        Get.snackbar(
+          'Error Login',
+          '${e.response?.data?['message'] ?? ''}',
+        );
+      }
       return false;
     } catch (e) {
       logKey('error logIn other', e);

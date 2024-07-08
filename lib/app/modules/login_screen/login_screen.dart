@@ -46,6 +46,7 @@ class LoginScreen extends GetWidget<LoginController> {
                         isEmail: true,
                         autoValidate: AutovalidateMode.onUserInteraction,
                         border: OutlineInputBorder(),
+                        textInputAction: TextInputAction.next,
                       ),
                       SizedBox(height: 46.v),
                       Obx(
@@ -56,6 +57,10 @@ class LoginScreen extends GetWidget<LoginController> {
                           isRequired: true,
                           border: OutlineInputBorder(),
                           autoValidate: AutovalidateMode.onUserInteraction,
+                          textInputAction: TextInputAction.done,
+                         onEditingComplete: () {
+                           controller.onTapLOGIN();
+                         },
                           suffixIcon: IconButton(
                             onPressed: () {
                               controller.isMaskPassword.value = !controller.isMaskPassword.value;

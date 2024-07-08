@@ -13,6 +13,8 @@ class InputBuilder extends StatelessWidget {
     this.isNumber = false,
     this.keyboardType = TextInputType.text,
     this.autoValidate = AutovalidateMode.always,
+    this.onEditingComplete,
+    this.textInputAction,
     this.isRequired = false,
     this.isEmail = false,
     this.textStyle,
@@ -20,6 +22,7 @@ class InputBuilder extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.border,
+    this.onSaved,
   });
 
   final String name;
@@ -28,6 +31,9 @@ class InputBuilder extends StatelessWidget {
   final bool isPhone;
   final bool isNumber;
   final TextInputType keyboardType;
+  final Function(String?)? onSaved;
+  final TextInputAction? textInputAction;
+  final Function()? onEditingComplete;
 
   //* validator
   final AutovalidateMode autoValidate;
@@ -47,10 +53,13 @@ class InputBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return FormBuilderTextField(
       name: name,
+      onSaved: onSaved,
       textAlign: textAlign,
       obscureText: maskText,
       keyboardType: isPhone || isNumber ? TextInputType.number : keyboardType,
       autovalidateMode: autoValidate,
+      textInputAction: textInputAction,
+      onEditingComplete: onEditingComplete,
       validator: FormBuilderValidators.compose([
         if (isRequired) FormBuilderValidators.required(),
         if (isEmail) FormBuilderValidators.email(),
