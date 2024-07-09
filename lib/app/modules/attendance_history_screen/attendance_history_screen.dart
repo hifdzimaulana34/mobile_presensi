@@ -123,13 +123,11 @@ class AttendanceHistoryScreen extends GetView<AttendanceHistoryController> {
                 onTap: () {
                   controller.monthPicker();
                 },
-                child: Expanded(
-                  child: Container(
-                    child: Text(
-                      // "lbl_january_2024".tr,
-                      '${DateFormat('MMM').format(DateTime(0, controller.currentMonth.value))} ${controller.currentYear.value}',
-                      style: CustomTextStyles.titleLargeRegular,
-                    ),
+                child: Container(
+                  child: Text(
+                    // "lbl_january_2024".tr,
+                    '${DateFormat('MMM').format(DateTime(0, controller.currentMonth.value))} ${controller.currentYear.value}',
+                    style: CustomTextStyles.titleLargeRegular,
                   ),
                 ),
               ),
