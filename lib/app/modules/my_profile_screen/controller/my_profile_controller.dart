@@ -1,6 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
+import 'package:hifdzi_s_application3/core/network/network_controller.dart';
 import 'package:hifdzi_s_application3/core/session_controller.dart';
+import 'package:hifdzi_s_application3/core/utils/environtment.dart';
+import 'package:hifdzi_s_application3/core/utils/function_utils.dart';
 
 import '../models/my_profile_model.dart';
 
@@ -26,8 +31,72 @@ class MyProfileController extends GetxController {
   Rx<MyProfileModel> myProfileModelObj = MyProfileModel().obs;
 
   Rx<bool> isShowPassword = true.obs;
+  final isEditMode = false.obs;
 
-  final networkC = Get.find<SessionController>();
+  final networkC = Get.find<NetworkController>();
+
+  final formKey = GlobalKey<FormBuilderState>();
+
+  final sessioC = Get.find<SessionController>();
+
+  final temp = <String, dynamic>{}.obs;
+  void initilFunction() {
+    // formKey.currentState!.val;
+    final user = sessioC.user.value;
+    logKey('datee',user.dateOfBirth);
+    temp.assignAll(
+      {
+        'name': user.name,
+        'gender': user.gender,
+        'date_of_birth': user.dateOfBirth != null ? DateTime.parse(user.dateOfBirth!) : DateTime.now(),
+        'category': '${user.categoryId}',
+        'id': '${user.nip}',
+        'email': user.email,
+        'phone': user.phone,
+        // 'password': 'password',
+      },
+    );
+  }
+
+  Future<void> editProfile() async {
+    formKey.currentState!.saveAndValidate();
+    final data = {
+      'name': formKey.currentState!.value['name'],
+      'gender': formKey.currentState!.value['gender'],
+      // 'date_of_birth': '${formKey.currentState!.value['date_of_birth']}',
+      'category': formKey.currentState!.value['category'],
+      'email': formKey.currentState!.value['email'],
+      'phone': formKey.currentState!.value['phone'],
+    };
+    try {
+      final Response res = await networkC.post(
+        '$url/auth/update-profile',
+        isFormData: true,
+        useAuth: true,
+        body: FormData.fromMap(data),
+      );
+      logKey('res editProfile', res.data);
+      if (res.data?['success'] ?? false) {
+        isEditMode.value = false;
+        Get.snackbar('Success', 'Profile has been updated');
+      }
+      sessioC.user.value.name = data['name'];
+      sessioC.user.value.gender = data['gender'];
+      // sessioC.user.value.dateOfBirth = '${data['date_of_birth']}';
+      sessioC.user.value.email = data['email'];
+      sessioC.user.value.phone = data['phone'];
+    } on DioException catch (e) {
+      logKey('error editProfile', e.response);
+      Get.snackbar('Error', 'error edit profile');
+    }
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    initilFunction();
+  }
 
   @override
   void onClose() {

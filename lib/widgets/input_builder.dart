@@ -6,6 +6,7 @@ import 'package:hifdzi_s_application3/core/app_export.dart';
 class InputBuilder extends StatelessWidget {
   const InputBuilder({
     super.key,
+    this.enabled = true,
     required this.name,
     this.textAlign = TextAlign.start,
     this.maskText = false,
@@ -24,7 +25,7 @@ class InputBuilder extends StatelessWidget {
     this.border,
     this.onSaved,
   });
-
+  final bool enabled;
   final String name;
   final TextAlign textAlign;
   final bool maskText;
@@ -52,6 +53,7 @@ class InputBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormBuilderTextField(
+      enabled: enabled,
       name: name,
       onSaved: onSaved,
       textAlign: textAlign,

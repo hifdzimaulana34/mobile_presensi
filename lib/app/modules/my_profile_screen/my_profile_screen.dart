@@ -1,125 +1,152 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hifdzi_s_application3/app/routes/app_pages.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
 import 'package:hifdzi_s_application3/core/utils/validation_functions.dart';
-import 'package:hifdzi_s_application3/widgets/custom_icon_button.dart';
 import 'package:hifdzi_s_application3/widgets/custom_text_form_field.dart';
 
+import 'components/profile_row.dart';
 import 'controller/my_profile_controller.dart';
 
 // ignore_for_file: must_be_immutable
 class MyProfileScreen extends GetWidget<MyProfileController> {
   MyProfileScreen({Key? key}) : super(key: key);
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: SizedBox(
-          width: SizeUtils.width,
-          child: SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: Form(
-              key: _formKey,
-              child: Container(
-                width: double.maxFinite,
-                padding: EdgeInsets.symmetric(horizontal: 12.h, vertical: 34.v),
-                child: Column(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Text("lbl_my_profile".tr, style: theme.textTheme.headlineLarge),
+              SizedBox(height: 4.v),
+              SizedBox(
+                height: 120.v,
+                width: 131.h,
+                child: Stack(
+                  alignment: Alignment.bottomRight,
                   children: [
-                    Text("lbl_my_profile".tr, style: theme.textTheme.headlineLarge),
-                    SizedBox(height: 4.v),
-                    SizedBox(
-                      height: 120.v,
-                      width: 131.h,
-                      child: Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          CustomImageView(imagePath: ImageConstant.imgProfileFreeVe, height: 120.v, width: 119.h, alignment: Alignment.centerLeft),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Container(
-                              height: 38.v,
-                              width: 50.h,
-                              padding: EdgeInsets.symmetric(horizontal: 6.h, vertical: 7.v),
-                              decoration: AppDecoration.fillOnPrimaryContainer.copyWith(borderRadius: BorderRadiusStyle.roundedBorder10),
-                              child: CustomImageView(
-                                imagePath: ImageConstant.imgCamera,
-                                height: 24.v,
-                                width: 38.h,
-                                alignment: Alignment.center,
-                              ),
+                    CustomImageView(imagePath: ImageConstant.imgProfileFreeVe, height: 120.v, width: 119.h, alignment: Alignment.centerLeft),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          controller.isEditMode.value = !controller.isEditMode.value;
+                        },
+                        child: Container(
+                          height: 38.v,
+                          width: 50.h,
+                          padding: EdgeInsets.symmetric(horizontal: 6.h, vertical: 7.v),
+                          decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                            borderRadius: BorderRadiusStyle.roundedBorder10,
+                          ),
+                          child: Obx(
+                            () => Icon(
+                              controller.isEditMode.value ? Icons.edit : Icons.edit_off,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15.v),
-                    SizedBox(
-                      height: 372.v,
-                      width: 334.h,
-                      child: Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 7.h, vertical: 14.v),
-                              decoration: AppDecoration.fillPrimary.copyWith(borderRadius: BorderRadiusStyle.roundedBorder10),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(height: 4.v),
-                                  _buildProfileStack(),
-                                  SizedBox(height: 18.v),
-                                  _buildNameRow(),
-                                  SizedBox(height: 15.v),
-                                  _buildDateOfBirthRow(),
-                                  SizedBox(height: 18.v),
-                                  _buildPhoneNumberRow(),
-                                  SizedBox(height: 17.v),
-                                  _buildOccupationRow(),
-                                  SizedBox(height: 18.v),
-                                  _buildEmailRow(),
-                                  SizedBox(height: 17.v),
-                                  _buildPasswordRow(),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(right: 7.h),
-                              child: CustomIconButton(
-                                  height: 34.v,
-                                  width: 43.h,
-                                  padding: EdgeInsets.all(5.h),
-                                  alignment: Alignment.topRight,
-                                  onTap: () {
-                                    onTapBtnEdit();
-                                  },
-                                  child: CustomImageView(imagePath: ImageConstant.imgEditBlack900))),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 5.v),
-                    GestureDetector(
-                      onTap: () {
-                        controller.networkC.logout();
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        child: Center(
-                          child: Text('Logout'),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
+              SizedBox(height: 15.v),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                decoration: BoxDecoration(
+                  color: Get.theme.primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: FormBuilder(
+                  key: controller.formKey,
+                  initialValue: controller.temp.value,
+                  child: Column(
+                    children: [
+                      Obx(
+                        () => ProfileRow(
+                          text: 'Name',
+                          name: 'name',
+                          canEdit: controller.isEditMode.value,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      ProfileRow(
+                        text: 'Gender',
+                        name: 'gender',
+                      ),
+                      const SizedBox(height: 10),
+                      Obx(
+                        () => ProfileRow(
+                          text: 'Date of birth',
+                          name: 'date_of_birth',
+                          isDateTime: true,
+                          canEdit: controller.isEditMode.value,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      ProfileRow(
+                        text: 'Kategori',
+                        name: 'category',
+                      ),
+                      const SizedBox(height: 10),
+                      ProfileRow(
+                        text: 'ID Pegawai',
+                        name: 'id',
+                      ),
+                      const SizedBox(height: 10),
+                      ProfileRow(
+                        text: 'Email',
+                        name: 'email',
+                      ),
+                      const SizedBox(height: 10),
+                      Obx(
+                        () => ProfileRow(
+                          text: 'Phone',
+                          name: 'phone',
+                          canEdit: controller.isEditMode.value,
+                        ),
+                      ),
+                      // const SizedBox(height: 10),
+                      // ProfileRow(
+                      //   text: 'Password',
+                      //   name: 'password',
+                      // ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 5.v),
+              GestureDetector(
+                onTap: () {
+                  controller.editProfile();
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Text('test edit'),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  controller.sessioC.logout();
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Text('Logout'),
+                  ),
+                ),
+              ),
+              const SizedBox(height:250),
+            ],
           ),
         ),
       ),
@@ -132,19 +159,25 @@ class MyProfileScreen extends GetWidget<MyProfileController> {
   }
 
   /// Section Widget
-  Widget _buildProfileStack() {
-    return Padding(
-      padding: EdgeInsets.only(left: 5.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(padding: EdgeInsets.only(top: 3.v, bottom: 6.v), child: Text("lbl_nama".tr, style: theme.textTheme.titleSmall)),
-          _buildProfileImage(),
-        ],
-      ),
-    );
-  }
+  // Widget _buildProfileStack() {
+  //   return Padding(
+  //     padding: EdgeInsets.only(left: 5.h),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Padding(
+  //           padding: EdgeInsets.only(top: 3.v, bottom: 6.v),
+  //           child: Text(
+  //             "lbl_nama".tr,
+  //             style: theme.textTheme.titleSmall,
+  //           ),
+  //         ),
+  //         // _buildProfileImage(),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   /// Section Widget
   Widget _buildGenderValue() {
