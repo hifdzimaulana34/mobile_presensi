@@ -61,25 +61,36 @@ class HomeUniqueCodeScreen extends GetWidget<HomeUniqueCodeController> {
 
   /// Section Widget
   Widget _buildProfileImage() {
-    return Align(
-      alignment: Alignment.center,
-      child: Row(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomImageView(
-            imagePath: ImageConstant.imgProfileFreeVe,
-            height: 139.adaptSize,
-            width: 139.adaptSize,
-            onTap: () {
-              onTapImgProfileFreeVe();
-            },
-          ),
-          const SizedBox(width: 15),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(top: 32.v, bottom: 53.v),
-              child: Column(
+    return InkWell(
+      onTap: () {
+        onTapImgProfileFreeVe();
+      },
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          color: Get.theme.primaryColor.withOpacity(0.4),
+          border: Border.all(),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // CustomImageView(
+              //   imagePath: ImageConstant.imgProfileFreeVe,
+              //   height: 139.adaptSize,
+              //   width: 139.adaptSize,
+              //   onTap: () {
+              //     onTapImgProfileFreeVe();
+              //   },
+              // ),
+              Image.asset(
+                ImageConstant.imgProfileFreeVe,
+              ),
+              const SizedBox(width: 15),
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GetX<SessionController>(
@@ -100,9 +111,9 @@ class HomeUniqueCodeScreen extends GetWidget<HomeUniqueCodeController> {
                   )
                 ],
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
