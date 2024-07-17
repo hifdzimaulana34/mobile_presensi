@@ -49,26 +49,30 @@ class AttendanceHistoryScreen extends GetView<AttendanceHistoryController> {
                   ),
                   Expanded(
                     child: Obx(
-                      () => ListView.separated(
-                        shrinkWrap: true,
-                        // physics: BouncingScrollPhysics(),
-                        itemCount: controller.temp.length,
-                        separatorBuilder: (context, index) {
-                          return Container(
-                            color: Colors.black,
-                            height: 1,
-                          );
-                        },
-                        itemBuilder: (context, index) {
-                          final data = controller.temp[index];
-                          return AttendanceHistoryRow(
-                            data1: data.date,
-                            data2: data.clockIn,
-                            data3: data.clockOut,
-                            data4: data.workhour.toString(),
-                          );
-                        },
-                      ),
+                      () => controller.isLoading.value
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : ListView.separated(
+                              shrinkWrap: true,
+                              // physics: BouncingScrollPhysics(),
+                              itemCount: controller.temp.length,
+                              separatorBuilder: (context, index) {
+                                return Container(
+                                  color: Colors.black,
+                                  height: 1,
+                                );
+                              },
+                              itemBuilder: (context, index) {
+                                final data = controller.temp[index];
+                                return AttendanceHistoryRow(
+                                  data1: data.date,
+                                  data2: data.schedule1,
+                                  data3: data.schedule2 ?? '',
+                                  data4: data.totalTime,
+                                );
+                              },
+                            ),
                     ),
                   )
                 ],

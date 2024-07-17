@@ -23,6 +23,7 @@ class AttendanceHistoryRow extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 5),
             height: 55,
             color: isHeader ? Colors.black : Color(0xFFB9B9B9),
             child: Center(
@@ -30,6 +31,7 @@ class AttendanceHistoryRow extends StatelessWidget {
                 child: Text(
                   // 'Date',
                   data1,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Tajawal',
                     fontWeight: FontWeight.w500,
@@ -79,18 +81,23 @@ class AttendanceHistoryRow extends StatelessWidget {
         Expanded(
           flex: 2,
           child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 5),
             height: 55,
             color: isHeader ? Colors.black : appTheme.blueGray10001,
             child: Center(
-              child: Text(
-                // "Working Hr's",
-                data4,
-                style: TextStyle(
-                  fontFamily: 'Tajawal',
-                  fontWeight: FontWeight.w500,
-                  color: isHeader ? Colors.white : Colors.black,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  // "Working Hr's",
+                  data4,
+                  style: TextStyle(
+                    fontFamily: 'Tajawal',
+                    fontWeight: FontWeight.w500,
+                    color: isHeader ? Colors.white : Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
                 ),
-                maxLines: 1,
               ),
             ),
           ),
