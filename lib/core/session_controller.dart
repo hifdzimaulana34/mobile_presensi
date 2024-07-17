@@ -26,9 +26,13 @@ class SessionController extends GetxController {
       logKey('user', user.value.toJson());
       return user.value;
     } on DioException catch (e) {
-      logKey('error getUser type', e.type);
-      logKey('error getUser', e.response);
-      logKey('error getUser message', e.message);
+      // logKey('error getUser type', e.type);
+      logKey('error getUser', e.response?.data);
+      logKey('error getUser', e.response == null);
+      // logKey('error getUser message', e.message);
+      if (e.response?.data is String) {
+        return null;
+      }
       if (e.response?.data['message'] == 'Unauthenticated') {
         await box.remove('token');
         await Get.snackbar('Session Expired', '');
