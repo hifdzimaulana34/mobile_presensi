@@ -122,30 +122,50 @@ class MyProfileScreen extends GetWidget<MyProfileController> {
                 ),
               ),
               SizedBox(height: 5.v),
-              GestureDetector(
-                onTap: () {
-                  controller.editProfile();
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  child: Center(
-                    child: Text('test edit'),
+              Obx(
+                () => Visibility(
+                  visible: controller.isEditMode.value,
+                  child: GestureDetector(
+                    onTap: () {
+                      controller.editProfile();
+                    },
+                    child: Container(
+                      width: 200,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Save',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  ),
+                  replacement: GestureDetector(
+                    onTap: () {
+                      controller.sessioC.logout();
+                    },
+                    child: Container(
+                      width: 200,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Logout',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-              GestureDetector(
-                onTap: () {
-                  controller.sessioC.logout();
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  child: Center(
-                    child: Text('Logout'),
-                  ),
-                ),
-              ),
-              const SizedBox(height:250),
+              const SizedBox(height: 250),
             ],
           ),
         ),

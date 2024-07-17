@@ -6,6 +6,7 @@ import 'package:hifdzi_s_application3/core/network/network_controller.dart';
 import 'package:hifdzi_s_application3/core/session_controller.dart';
 import 'package:hifdzi_s_application3/core/utils/environtment.dart';
 import 'package:hifdzi_s_application3/core/utils/function_utils.dart';
+import 'package:intl/intl.dart';
 
 import '../models/my_profile_model.dart';
 
@@ -43,7 +44,7 @@ class MyProfileController extends GetxController {
   void initilFunction() {
     // formKey.currentState!.val;
     final user = sessioC.user.value;
-    logKey('datee',user.dateOfBirth);
+    logKey('datee', user.dateOfBirth);
     temp.assignAll(
       {
         'name': user.name,
@@ -60,10 +61,11 @@ class MyProfileController extends GetxController {
 
   Future<void> editProfile() async {
     formKey.currentState!.saveAndValidate();
+    logKey('zzz',formKey.currentState!.value);
     final data = {
       'name': formKey.currentState!.value['name'],
       'gender': formKey.currentState!.value['gender'],
-      // 'date_of_birth': '${formKey.currentState!.value['date_of_birth']}',
+      'date_of_birth': '${DateFormat('yyyy-MM-dd').format(formKey.currentState!.value['date_of_birth'])}',
       'category': formKey.currentState!.value['category'],
       'email': formKey.currentState!.value['email'],
       'phone': formKey.currentState!.value['phone'],
@@ -76,13 +78,14 @@ class MyProfileController extends GetxController {
         body: FormData.fromMap(data),
       );
       logKey('res editProfile', res.data);
+      logKey('birth date', data['date_of_birth']);
       if (res.data?['success'] ?? false) {
         isEditMode.value = false;
         Get.snackbar('Success', 'Profile has been updated');
       }
       sessioC.user.value.name = data['name'];
       sessioC.user.value.gender = data['gender'];
-      // sessioC.user.value.dateOfBirth = '${data['date_of_birth']}';
+      sessioC.user.value.dateOfBirth = '${data['date_of_birth']}';
       sessioC.user.value.email = data['email'];
       sessioC.user.value.phone = data['phone'];
     } on DioException catch (e) {
