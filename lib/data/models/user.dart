@@ -13,6 +13,7 @@ class User {
     this.twoFactorSecret,
     this.twoFactorRecoveryCodes,
     this.twoFactorConfirmedAt,
+    this.faceIdentifier,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -29,6 +30,7 @@ class User {
   dynamic twoFactorSecret;
   dynamic twoFactorRecoveryCodes;
   dynamic twoFactorConfirmedAt;
+  String? faceIdentifier;
   String createdAt;
   String updatedAt;
 
@@ -46,6 +48,7 @@ class User {
         twoFactorSecret: json['two_factor_secret'],
         twoFactorRecoveryCodes: json['two_factor_recovery_codes'],
         twoFactorConfirmedAt: json['two_factor_confirmed_at'],
+        faceIdentifier: json['face_identifier'],
         createdAt: json['created_at'],
         updatedAt: json['updated_at'],
       );
@@ -64,6 +67,7 @@ class User {
         "two_factor_secret": twoFactorSecret,
         "two_factor_recovery_codes": twoFactorRecoveryCodes,
         "two_factor_confirmed_at": twoFactorConfirmedAt,
+        "face_identifier": faceIdentifier,
         "created_at": createdAt,
         "updated_at": updatedAt,
       };
@@ -81,6 +85,7 @@ class User {
         twoFactorSecret = null,
         twoFactorRecoveryCodes = null,
         twoFactorConfirmedAt = null,
+        faceIdentifier = null,
         createdAt = '',
         updatedAt = '';
 }

@@ -8,6 +8,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
 import 'package:hifdzi_s_application3/core/network/network_controller.dart';
+import 'package:hifdzi_s_application3/core/session_controller.dart';
 import 'package:hifdzi_s_application3/core/utils/environtment.dart';
 import 'package:hifdzi_s_application3/core/utils/function_utils.dart';
 import 'package:http/http.dart' as http;
@@ -26,6 +27,7 @@ import '../take_a_selfie_screen.dart';
 class TakeASelfieController extends GetxController {
   Rx<TakeASelfieModel> takeASelfieModelObj = TakeASelfieModel().obs;
   final networkC = Get.find<NetworkController>();
+  final sessionC = Get.find<SessionController>();
   late CameraController? cameraController;
   final isLoading = false.obs;
 
@@ -280,6 +282,59 @@ class TakeASelfieController extends GetxController {
     }
   }
 
+  Future<dynamic> createAttendance(String imagePath, {required String streetName}) async {
+    try {
+      final Response res = await networkC.post(
+        '$url/attendances',
+        isFormData: true,
+        useAuth: true,
+        body: FormData.fromMap({
+          'schedule_presence_id': Get.arguments['schedule_presence_id'],
+          'photo': MultipartFile.fromFileSync(imagePath),
+          'company_id': 1,
+        }),
+      );
+      logKey('res createAttendance', res.data);
+      Get.defaultDialog(
+        backgroundColor: Get.theme.primaryColor,
+        title: 'Absensi Berhasil',
+        onConfirm: () {
+          Get.close(2);
+        },
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Text(
+            //   'Nama : ${resFaceRecog['result']['user']['user_name']}',
+            //   style: theme.textTheme.headlineSmall,
+            // ),
+            // Text(
+            //   'Alamat : ${location.first.street ?? ''}',
+            //   style: theme.textTheme.headlineSmall,
+            // ),
+          ],
+        ),
+      );
+    } on DioException catch (e) {
+      logKey('error createAttendance', e.response?.data);
+      Get.defaultDialog(
+        backgroundColor: Get.theme.primaryColor,
+        title: 'Absensi Gagal',
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              e.response?.data?['message'] ?? '',
+              style: theme.textTheme.headlineSmall,
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   Future<void> testIdentifika() async {
     isLoading.value = true;
     final location = await getLocation();
@@ -296,8 +351,8 @@ class TakeASelfieController extends GetxController {
       isLoading.value = false;
       return null;
     }
-    final res = await faceRecog(imageData.path);
-    if (res == null || !res['result']['verified']) {
+    final resFaceRecog = await faceRecog(imageData.path);
+    if (resFaceRecog == null || !resFaceRecog['result']['verified']) {
       isLoading.value = false;
       Get.defaultDialog(
         backgroundColor: Get.theme.primaryColor,
@@ -305,7 +360,7 @@ class TakeASelfieController extends GetxController {
       );
       return;
     }
-    final resVerif = await faceVerification(res['result']['user']['_id'], imageData.path);
+    final resVerif = await faceVerification(resFaceRecog['result']['user']['_id'], imageData.path);
     logKey('resVerif zxc', resVerif);
     isLoading.value = false;
     if (resVerif == null) {
@@ -322,23 +377,13 @@ class TakeASelfieController extends GetxController {
       );
       return;
     }
-    Get.defaultDialog(
-      backgroundColor: Get.theme.primaryColor,
-      title: 'Berhasil',
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Nama : ${res['result']['user']['user_name']}',
-            style: theme.textTheme.headlineSmall,
-          ),
-          Text(
-            'Alamat : ${location.first.street ?? ''}',
-            style: theme.textTheme.headlineSmall,
-          ),
-        ],
-      ),
-    );
+    if (resFaceRecog['result']['user']['_id'] != sessionC.user.value.faceIdentifier) {
+      Get.defaultDialog(
+        backgroundColor: Get.theme.primaryColor,
+        middleText: 'Absen error',
+      );
+      return;
+    }
+    await createAttendance(imageData.path, streetName: location.first.street ?? '');
   }
 }
