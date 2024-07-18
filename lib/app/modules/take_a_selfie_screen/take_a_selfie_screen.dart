@@ -82,7 +82,7 @@ class TakeASelfieScreen extends GetView<TakeASelfieController> {
           return CircularProgressIndicator();
         } else if (snapshot.data == true) {
           return GestureDetector(
-            onTap: () => controller.openCamera(context),
+            // onTap: () => controller.openCamera(context),
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 33),
               padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
