@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hifdzi_s_application3/app/routes/app_pages.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
-import 'package:hifdzi_s_application3/core/session_controller.dart';
 import 'package:hifdzi_s_application3/widgets/custom_elevated_button.dart';
 
 import 'controller/home_unique_code_controller.dart';
@@ -90,26 +89,37 @@ class HomeUniqueCodeScreen extends GetWidget<HomeUniqueCodeController> {
                 ImageConstant.imgProfileFreeVe,
               ),
               const SizedBox(width: 15),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GetX<SessionController>(
-                    init: SessionController(),
-                    builder: (sessionC) {
-                      return Text(
-                        // "lbl_hi_amirul_yusuf".tr,
-                        sessionC.user.value.name,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Text(
+                        'Muhammad Hifdzi Maulana',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: CustomTextStyles.headlineSmallTajawalMedium,
-                      );
-                    },
-                  ),
-                  SizedBox(height: 3.v),
-                  Text(
-                    "lbl_polinema2".tr,
-                    textAlign: TextAlign.center,
-                    style: CustomTextStyles.titleSmallTajawalOnPrimaryContainer,
-                  )
-                ],
+                      ),
+                    ),
+                    // GetX<SessionController>(
+                    //   init: SessionController(),
+                    //   builder: (sessionC) {
+                    //     return Text(
+                    //       // "lbl_hi_amirul_yusuf".tr,
+                    //       // sessionC.user.value.name,
+                    //       'Muhammad Hifdzi Maulana',
+                    //       style: CustomTextStyles.headlineSmallTajawalMedium,
+                    //     );
+                    //   },
+                    // ),
+                    SizedBox(height: 3.v),
+                    Text(
+                      "lbl_polinema2".tr,
+                      textAlign: TextAlign.center,
+                      style: CustomTextStyles.titleSmallTajawalOnPrimaryContainer,
+                    )
+                  ],
+                ),
               ),
             ],
           ),
