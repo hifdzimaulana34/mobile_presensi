@@ -36,7 +36,7 @@ class TakeASelfieController extends GetxController {
   void initialFunction() async {
     isLoading.listen((v) {
       if (v) {
-        dialogLoading();
+        dialogLoading(barrierDismissible: false);
       } else if (!v && Get.isDialogOpen!) {
         Get.back();
       }

@@ -58,10 +58,13 @@ Widget loadingCircle({double? size}) {
   );
 }
 
-void dialogLoading({double? size}) {
+void dialogLoading({double? size, bool barrierDismissible = false}) {
   Get.dialog(
-    loadingCircle(size: size),
+    PopScope(
+      canPop: barrierDismissible,
+      child: loadingCircle(size: size),
+    ),
     // loading(size: size),
-    barrierDismissible: false,
+    barrierDismissible: barrierDismissible,
   );
 }
