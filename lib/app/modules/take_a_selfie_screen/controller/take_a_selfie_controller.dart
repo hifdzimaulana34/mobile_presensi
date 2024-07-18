@@ -351,16 +351,17 @@ class TakeASelfieController extends GetxController {
       isLoading.value = false;
       return null;
     }
-    final resFaceRecog = await faceRecog(imageData.path);
-    if (resFaceRecog == null || !resFaceRecog['result']['verified']) {
-      isLoading.value = false;
-      Get.defaultDialog(
-        backgroundColor: Get.theme.primaryColor,
-        middleText: 'Error face recog',
-      );
-      return;
-    }
-    final resVerif = await faceVerification(resFaceRecog['result']['user']['_id'], imageData.path);
+    // final resFaceRecog = await faceRecog(imageData.path);
+    // if (resFaceRecog == null || !resFaceRecog['result']['verified']) {
+    //   isLoading.value = false;
+    //   Get.defaultDialog(
+    //     backgroundColor: Get.theme.primaryColor,
+    //     middleText: 'Error face recog',
+    //   );
+    //   return;
+    // }
+    // final resVerif = await faceVerification(resFaceRecog['result']['user']['_id'], imageData.path);
+    final resVerif = await faceVerification(sessionC.user.value.faceIdentifier!, imageData.path);
     logKey('resVerif zxc', resVerif);
     isLoading.value = false;
     if (resVerif == null) {
@@ -377,13 +378,13 @@ class TakeASelfieController extends GetxController {
       );
       return;
     }
-    if (resFaceRecog['result']['user']['_id'] != sessionC.user.value.faceIdentifier) {
-      Get.defaultDialog(
-        backgroundColor: Get.theme.primaryColor,
-        middleText: 'Absen error',
-      );
-      return;
-    }
+    // if (resFaceRecog['result']['user']['_id'] != sessionC.user.value.faceIdentifier) {
+    //   Get.defaultDialog(
+    //     backgroundColor: Get.theme.primaryColor,
+    //     middleText: 'Absen error',
+    //   );
+    //   return;
+    // }
     await createAttendance(imageData.path, streetName: location.first.street ?? '');
   }
 }
