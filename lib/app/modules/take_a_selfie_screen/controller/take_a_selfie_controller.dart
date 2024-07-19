@@ -243,7 +243,7 @@ class TakeASelfieController extends GetxController {
     }
   }
 
-  Future<Map<String, dynamic>?> faceVerification(String identifier, String imagePath) async {
+  Future<({dynamic datas, String errorMessage})> faceVerification(String identifier, String imagePath) async {
     var formData = FormData.fromMap({
       'image': MultipartFile.fromFileSync(imagePath),
       'identifier': identifier,
@@ -257,15 +257,15 @@ class TakeASelfieController extends GetxController {
         useAuth: true,
       );
       logKey('res faceVerification', res.data);
-      return res.data;
+      return (datas: res.data, errorMessage: '');
     } on DioException catch (e) {
       logKey('error faceVerification', e.response?.data);
       logKey('error faceVerification', e.requestOptions.data);
       logKey('error faceVerification', e.requestOptions.headers);
-      return null;
+      return (datas: null, errorMessage: '${e.response?.data?['message'] ?? ''}');
     } catch (e) {
       print('error $e');
-      return null;
+      return (datas: null, errorMessage: '');
     }
   }
 
@@ -322,10 +322,10 @@ class TakeASelfieController extends GetxController {
             //   'Nama : ${resFaceRecog['result']['user']['user_name']}',
             //   style: theme.textTheme.headlineSmall,
             // ),
-            // Text(
-            //   'Alamat : ${location.first.street ?? ''}',
-            //   style: theme.textTheme.headlineSmall,
-            // ),
+            Text(
+              'Alamat : $streetName',
+              style: theme.textTheme.headlineSmall,
+            ),
           ],
         ),
       );
@@ -377,20 +377,40 @@ class TakeASelfieController extends GetxController {
     final resVerif = await faceVerification(sessionC.user.value.faceIdentifier!, imageData.path);
     logKey('resVerif zxc', resVerif);
     isLoading.value = false;
-    if (resVerif == null) {
+    if (resVerif.datas == null && resVerif.errorMessage != '') {
+      if (resVerif.errorMessage != '') {
+        final firstWord = resVerif.errorMessage.split(' ').first;
+        //* error kalau tidak terdeteksi muka di camera
+        if (firstWord == 'Face') {
+          Get.defaultDialog(
+            backgroundColor: Get.theme.primaryColor,
+            title: 'Error Face Verification',
+            middleText: 'Wajah tidak terdeteksi pada kamera',
+          );
+          return;
+        }
+        //* Error kalau terdeteksi wajah, namun tidak sesuai atau tidak verified
+        Get.defaultDialog(
+          backgroundColor: Get.theme.primaryColor,
+          title: 'Error Face Verification',
+          middleText: 'Wajah tidak sesuai atau tidak terdaftar',
+        );
+        return;
+      }
       Get.defaultDialog(
         backgroundColor: Get.theme.primaryColor,
-        middleText: 'Error face verification',
+        title: 'Error Face Verification',
+        middleText: 'unknown error',
       );
       return;
     }
-    if (!resVerif['result']['verified']) {
-      Get.defaultDialog(
-        backgroundColor: Get.theme.primaryColor,
-        middleText: 'Error face verification - not verified',
-      );
-      return;
-    }
+    // if (!resVerif.datas['result']['verified']) {
+    //   Get.defaultDialog(
+    //     backgroundColor: Get.theme.primaryColor,
+    //     middleText: 'Error face verification - not verified',
+    //   );
+    //   return;
+    // }
     // if (resFaceRecog['result']['user']['_id'] != sessionC.user.value.faceIdentifier) {
     //   Get.defaultDialog(
     //     backgroundColor: Get.theme.primaryColor,
