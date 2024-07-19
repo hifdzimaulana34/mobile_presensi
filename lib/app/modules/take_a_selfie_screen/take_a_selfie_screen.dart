@@ -35,7 +35,52 @@ class TakeASelfieScreen extends GetView<TakeASelfieController> {
                 ),
               ),
               SizedBox(height: 10.v),
-              _buildProfileSection(context)
+              // _buildProfileSection(context)
+              GestureDetector(
+                onTap: () {
+                  if (!controller.cameraAccess.value) {
+                    controller.initializeCamera();
+                  }
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 33),
+                  padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent, // Set background color to transparent
+                    borderRadius: BorderRadius.circular(8.0), // Add rounded corners
+                    border: Border.all(color: Colors.black, width: 5), // Add thin black border
+                  ),
+                  width: 250,
+                  height: 250,
+                  child: GetBuilder<TakeASelfieController>(
+                    init: TakeASelfieController(),
+                    builder: (_) {
+                      if (controller.cameraAccess.value && controller.cameraController != null) {
+                        return CameraPreview(controller.cameraController!);
+                      }
+                      return Container(
+                        padding: EdgeInsetsDirectional.symmetric(horizontal: 10),
+                        child: Center(
+                          child: Text(
+                            'Need camera access, tap here to grant access',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  // child: GetBuilder<TakeASelfieController>(
+                  //   init: TakeASelfieController(),
+                  //   initState: (_) {},
+                  //   builder: (_) {
+                  //     if (controller.cameraController == null) {
+                  //       return CircularProgressIndicator();
+                  //     }
+                  //     return CameraPreview(controller.cameraController!);
+                  //   },
+                  // ),
+                ),
+              ),
               // GestureDetector(
               //   onTap: () {
               //     controller.selectImage();
@@ -74,43 +119,44 @@ class TakeASelfieScreen extends GetView<TakeASelfieController> {
     );
   }
 
-  Widget _buildProfileSection(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: controller.checkCameraPermission(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        } else if (snapshot.data == true) {
-          return GestureDetector(
-            // onTap: () => controller.openCamera(context),
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 33),
-              padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
-              decoration: BoxDecoration(
-                color: Colors.transparent, // Set background color to transparent
-                borderRadius: BorderRadius.circular(8.0), // Add rounded corners
-                border: Border.all(color: Colors.black, width: 5), // Add thin black border
-              ),
-              width: 250,
-              height: 250,
-              child: GetBuilder<TakeASelfieController>(
-                init: TakeASelfieController(),
-                initState: (_) {},
-                builder: (_) {
-                  if (controller.cameraController == null) {
-                    return CircularProgressIndicator();
-                  }
-                  return CameraPreview(controller.cameraController!);
-                },
-              ),
-            ),
-          );
-        } else {
-          return Text("Camera permission not granted");
-        }
-      },
-    );
-  }
+  // Widget _buildProfileSection(BuildContext context) {
+  //   return FutureBuilder<bool>(
+  //     // future: controller.checkCameraPermission(),
+  //     future: null,
+  //     builder: (context, snapshot) {
+  //       if (snapshot.connectionState == ConnectionState.waiting) {
+  //         return CircularProgressIndicator();
+  //       } else if (snapshot.data == true) {
+  //         return GestureDetector(
+  //           // onTap: () => controller.openCamera(context),
+  //           child: Container(
+  //             margin: EdgeInsets.symmetric(horizontal: 33),
+  //             padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+  //             decoration: BoxDecoration(
+  //               color: Colors.transparent, // Set background color to transparent
+  //               borderRadius: BorderRadius.circular(8.0), // Add rounded corners
+  //               border: Border.all(color: Colors.black, width: 5), // Add thin black border
+  //             ),
+  //             width: 250,
+  //             height: 250,
+  //             child: GetBuilder<TakeASelfieController>(
+  //               init: TakeASelfieController(),
+  //               initState: (_) {},
+  //               builder: (_) {
+  //                 if (controller.cameraController == null) {
+  //                   return CircularProgressIndicator();
+  //                 }
+  //                 return CameraPreview(controller.cameraController!);
+  //               },
+  //             ),
+  //           ),
+  //         );
+  //       } else {
+  //         return Text("Camera permission not granted");
+  //       }
+  //     },
+  //   );
+  // }
 
   Widget _buildTakeASelfieSection() {
     return SizedBox(

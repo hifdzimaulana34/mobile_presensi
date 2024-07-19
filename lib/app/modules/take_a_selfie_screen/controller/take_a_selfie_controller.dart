@@ -28,12 +28,15 @@ class TakeASelfieController extends GetxController {
   Rx<TakeASelfieModel> takeASelfieModelObj = TakeASelfieModel().obs;
   final networkC = Get.find<NetworkController>();
   final sessionC = Get.find<SessionController>();
-  late CameraController? cameraController;
+  CameraController? cameraController;
   final isLoading = false.obs;
+
+  final cameraAccess = false.obs;
 
   var imagePath = ''.obs;
 
   void initialFunction() async {
+    initializeCamera();
     isLoading.listen((v) {
       if (v) {
         dialogLoading(barrierDismissible: false);
@@ -41,7 +44,6 @@ class TakeASelfieController extends GetxController {
         Get.back();
       }
     });
-    await initializeCamera();
     await graintLocationAccess();
   }
 
@@ -62,7 +64,9 @@ class TakeASelfieController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    cameraController!.dispose();
+    if (cameraController != null) {
+      cameraController!.dispose();
+    }
   }
 
   Future<List<Placemark>?> getLocation() async {
@@ -145,13 +149,21 @@ class TakeASelfieController extends GetxController {
   }
 
   Future<void> initializeCamera() async {
+    cameraAccess.value = Get.arguments['camera_access'];
+    final res = await checkCameraPermission();
+    if (!res) {
+      update();
+      return;
+    }
     final cameras = await availableCameras();
     final frontCam = cameras[1];
     cameraController = CameraController(
+      // Get.arguments['cameras'][1],
       frontCam,
       ResolutionPreset.medium,
     );
     await cameraController!.initialize();
+    cameraAccess.value = true;
     update();
   }
 
@@ -160,6 +172,7 @@ class TakeASelfieController extends GetxController {
     if (status.isDenied) {
       status = await Permission.camera.request();
       if (status.isDenied) {
+        // Get.back();
         return false;
       }
     }

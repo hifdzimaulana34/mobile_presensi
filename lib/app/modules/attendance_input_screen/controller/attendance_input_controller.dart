@@ -4,7 +4,9 @@ import 'package:hifdzi_s_application3/core/network/network_controller.dart';
 import 'package:hifdzi_s_application3/core/utils/environtment.dart';
 import 'package:hifdzi_s_application3/core/utils/function_utils.dart';
 import 'package:hifdzi_s_application3/data/models/schedule.dart';
+import 'package:permission_handler/permission_handler.dart';
 
+import '../../../routes/app_pages.dart';
 import '../models/attendance_input_model.dart';
 
 /// A controller class for the AttendanceInputScreen.
@@ -40,6 +42,22 @@ class AttendanceInputController extends GetxController {
   void initFunction() async {
     await getSchedules();
     isLoading.value = false;
+  }
+
+  onTapImgImage(Schedule data) async {
+    // final _cameras = await availableCameras();
+    // logKey('_cameras',_cameras[1]);
+    final cameraAccess = await Permission.camera.status;
+    logKey('cameraAccess',cameraAccess);
+    Get.toNamed(
+      Routes.TAKE_A_SELFIE_SCREEN,
+      arguments: {
+        'company_id': 1,
+        'schedule_presence_id': data.id,
+        // 'cameras': _cameras,
+        'camera_access': cameraAccess.isGranted,
+      },
+    );
   }
 
   @override
