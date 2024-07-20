@@ -15,6 +15,10 @@ class InputBuilder extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.autoValidate = AutovalidateMode.always,
     this.onEditingComplete,
+    this.onChanged,
+    this.autoFocus = false,
+    this.isVerifPass = false,
+    this.value,
     this.textInputAction,
     this.isRequired = false,
     this.isEmail = false,
@@ -36,6 +40,11 @@ class InputBuilder extends StatelessWidget {
   final Function(String?)? onSaved;
   final TextInputAction? textInputAction;
   final Function()? onEditingComplete;
+  final Function(String?)? onChanged;
+  final bool isVerifPass;
+  final bool autoFocus;
+  //* for verifPass
+  final String? value;
 
   //* validator
   final AutovalidateMode autoValidate;
@@ -62,11 +71,14 @@ class InputBuilder extends StatelessWidget {
       obscureText: maskText,
       keyboardType: isPhone || isNumber ? TextInputType.number : keyboardType,
       autovalidateMode: autoValidate,
+      autofocus: autoFocus,
       textInputAction: textInputAction,
       onEditingComplete: onEditingComplete,
+      onChanged: onChanged,
       validator: FormBuilderValidators.compose([
         if (isRequired) FormBuilderValidators.required(),
         if (isEmail) FormBuilderValidators.email(),
+        if (isVerifPass) FormBuilderValidators.equal(value ?? '', errorText: 'Value must be equal to password'),
         // if (isVerifPass) FormBuilderValidators.equal(context, value != null ? value! : '', errorText: 'Value must be equal to password'),
       ]),
       // style: TextStyle(
