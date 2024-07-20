@@ -8,6 +8,8 @@ import '../modules/attendance_input_screen/attendance_input_screen.dart';
 import '../modules/attendance_input_screen/binding/attendance_input_binding.dart';
 import '../modules/attendance_permit/bindings/attendance_permit_binding.dart';
 import '../modules/attendance_permit/views/attendance_permit_view.dart';
+import '../modules/change_password/bindings/change_password_binding.dart';
+import '../modules/change_password/views/change_password_view.dart';
 import '../modules/edit_profile_screen/binding/edit_profile_binding.dart';
 import '../modules/edit_profile_screen/edit_profile_screen.dart';
 import '../modules/forgot_password_screen/binding/forgot_password_binding.dart';
@@ -158,6 +160,11 @@ class AppPages {
       name: _Paths.ATTENDANCE_PERMIT,
       page: () => const AttendancePermitView(),
       binding: AttendancePermitBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGE_PASSWORD,
+      page: () => const ChangePasswordView(),
+      binding: ChangePasswordBinding(),
     ),
   ];
 }

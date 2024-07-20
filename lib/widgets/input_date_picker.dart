@@ -13,6 +13,7 @@ class InputDatePicker extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.border,
+    this.fillColor,
   });
   final bool enabled;
   final String name;
@@ -20,6 +21,7 @@ class InputDatePicker extends StatelessWidget {
   final DateTime? firstDate;
 
   //* inputDecoration
+  final Color? fillColor;
   final String hintText;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
@@ -34,7 +36,7 @@ class InputDatePicker extends StatelessWidget {
       format: DateFormat('dd/MM/yyyy'),
       firstDate: firstDate,
       decoration: InputDecoration(
-        fillColor: Colors.white,
+        fillColor: fillColor ?? Colors.white,
         filled: true,
         hintText: hintText,
         hintStyle: Get.theme.textTheme.bodyLarge,

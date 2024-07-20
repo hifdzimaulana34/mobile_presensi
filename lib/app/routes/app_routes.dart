@@ -20,6 +20,7 @@ abstract class Routes {
   static const EDIT_PROFILE_SCREEN = _Paths.EDIT_PROFILE_SCREEN;
   static const APP_NAVIGATION_SCREEN = _Paths.APP_NAVIGATION_SCREEN;
   static const ATTENDANCE_PERMIT = _Paths.ATTENDANCE_PERMIT;
+  static const CHANGE_PASSWORD = _Paths.CHANGE_PASSWORD;
 }
 
 abstract class _Paths {
@@ -57,4 +58,5 @@ abstract class _Paths {
 
   // static const initialRoute = '/initialRoute';
   static const ATTENDANCE_PERMIT = '/attendance-permit';
+  static const CHANGE_PASSWORD = '/change-password';
 }

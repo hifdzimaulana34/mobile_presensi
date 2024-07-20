@@ -24,6 +24,7 @@ class InputBuilder extends StatelessWidget {
     this.suffixIcon,
     this.border,
     this.onSaved,
+    this.fillColor,
   });
   final bool enabled;
   final String name;
@@ -45,6 +46,7 @@ class InputBuilder extends StatelessWidget {
   final TextStyle? textStyle;
 
   //* inputDecoration
+  final Color? fillColor;
   final String hintText;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
@@ -74,7 +76,7 @@ class InputBuilder extends StatelessWidget {
 
       style: textStyle ?? Get.theme.textTheme.bodyLarge,
       decoration: InputDecoration(
-        fillColor: Colors.white,
+        fillColor: fillColor ?? Colors.white,
         filled: true,
         hintText: hintText,
         hintStyle: Get.theme.textTheme.bodyLarge,
