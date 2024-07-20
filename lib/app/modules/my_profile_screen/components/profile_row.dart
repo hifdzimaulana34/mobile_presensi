@@ -51,12 +51,14 @@ class ProfileRow extends GetView<MyProfileController> {
           child: isDateTime
               ? InputDatePicker(
                   enabled: canEdit,
+                  fillColor: canEdit ? PrimaryColors().greenA200 : null,
                   name: name,
                   hintText: '',
                   border: OutlineInputBorder(),
                 )
               : InputBuilder(
                   enabled: canEdit,
+                  fillColor: canEdit ? PrimaryColors().greenA200 : null,
                   name: name,
                   maskText: showPassword,
                   suffixIcon: isPassword

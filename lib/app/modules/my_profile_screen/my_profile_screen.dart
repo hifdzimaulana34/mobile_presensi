@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hifdzi_s_application3/app/routes/app_pages.dart';
 import 'package:hifdzi_s_application3/core/app_export.dart';
+import 'package:hifdzi_s_application3/core/utils/function_utils.dart';
 import 'package:hifdzi_s_application3/core/utils/validation_functions.dart';
 import 'package:hifdzi_s_application3/widgets/custom_text_form_field.dart';
 
@@ -31,27 +32,27 @@ class MyProfileScreen extends GetWidget<MyProfileController> {
                   alignment: Alignment.bottomRight,
                   children: [
                     CustomImageView(imagePath: ImageConstant.imgProfileFreeVe, height: 120.v, width: 119.h, alignment: Alignment.centerLeft),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: GestureDetector(
-                        onTap: () {
-                          controller.isEditMode.value = !controller.isEditMode.value;
-                        },
-                        child: Container(
-                          height: 38.v,
-                          width: 50.h,
-                          padding: EdgeInsets.symmetric(horizontal: 6.h, vertical: 7.v),
-                          decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                            borderRadius: BorderRadiusStyle.roundedBorder10,
-                          ),
-                          child: Obx(
-                            () => Icon(
-                              controller.isEditMode.value ? Icons.edit : Icons.edit_off,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Align(
+                    //   alignment: Alignment.bottomRight,
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       controller.isEditMode.value = !controller.isEditMode.value;
+                    //     },
+                    //     child: Container(
+                    //       height: 38.v,
+                    //       width: 50.h,
+                    //       padding: EdgeInsets.symmetric(horizontal: 6.h, vertical: 7.v),
+                    //       decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                    //         borderRadius: BorderRadiusStyle.roundedBorder10,
+                    //       ),
+                    //       child: Obx(
+                    //         () => Icon(
+                    //           controller.isEditMode.value ? Icons.edit : Icons.edit_off,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -77,30 +78,6 @@ class MyProfileScreen extends GetWidget<MyProfileController> {
                       ),
                       const SizedBox(height: 10),
                       ProfileRow(
-                        text: 'Gender',
-                        name: 'gender',
-                      ),
-                      const SizedBox(height: 10),
-                      Obx(
-                        () => ProfileRow(
-                          text: 'Date of birth',
-                          name: 'date_of_birth',
-                          isDateTime: true,
-                          canEdit: controller.isEditMode.value,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      ProfileRow(
-                        text: 'Kategori',
-                        name: 'category',
-                      ),
-                      const SizedBox(height: 10),
-                      ProfileRow(
-                        text: 'ID Pegawai',
-                        name: 'id',
-                      ),
-                      const SizedBox(height: 10),
-                      ProfileRow(
                         text: 'Email',
                         name: 'email',
                       ),
@@ -112,6 +89,31 @@ class MyProfileScreen extends GetWidget<MyProfileController> {
                           canEdit: controller.isEditMode.value,
                         ),
                       ),
+                      // ProfileRow(
+                      //   text: 'Gender',
+                      //   name: 'gender',
+                      // ),
+                      const SizedBox(height: 10),
+                      Obx(
+                        () => ProfileRow(
+                          text: 'Date of birth',
+                          name: 'date_of_birth',
+                          isDateTime: true,
+                          canEdit: controller.isEditMode.value,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      // const SizedBox(height: 10),
+                      // ProfileRow(
+                      //   text: 'Kategori',
+                      //   name: 'category',
+                      // ),
+                      // ProfileRow(
+                      //   text: 'ID Pegawai',
+                      //   name: 'id',
+                      // ),
+                      // const SizedBox(height: 10),
+
                       // const SizedBox(height: 10),
                       // ProfileRow(
                       //   text: 'Password',
@@ -122,45 +124,84 @@ class MyProfileScreen extends GetWidget<MyProfileController> {
                 ),
               ),
               SizedBox(height: 5.v),
-              Obx(
-                () => Visibility(
-                  visible: controller.isEditMode.value,
-                  child: GestureDetector(
-                    onTap: () {
-                      controller.editProfile();
-                    },
-                    child: Container(
-                      width: 200,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Save',
-                          style: TextStyle(color: Colors.black),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          // controller.editProfile();
+                          Get.toNamed(Routes.CHANGE_PASSWORD);
+                        },
+                        child: Container(
+                          width: 200,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Change Password',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  replacement: GestureDetector(
-                    onTap: () {
-                      controller.sessioC.logout();
-                    },
-                    child: Container(
-                      width: 200,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Logout',
-                          style: TextStyle(color: Colors.black),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () async {
+                          if (controller.isLoadingEdit.value) {
+                            return;
+                          }
+                          if (controller.isEditMode.value) {
+                            await controller.editProfile();
+                          }
+                          controller.isEditMode.value = !controller.isEditMode.value;
+                          logKey('controller.isEditMode.value', controller.isEditMode.value);
+                        },
+                        child: Obx(
+                          () => Container(
+                            width: 200,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: controller.isEditMode.value ? PrimaryColors().greenA200 : Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: controller.isLoadingEdit.value
+                                  ? CircularProgressIndicator()
+                                  : Text(
+                                      controller.isEditMode.value ? 'Save' : 'Edit Profile',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                            ),
+                          ),
                         ),
                       ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 5.v),
+              GestureDetector(
+                onTap: () {
+                  controller.sessioC.logout();
+                },
+                child: Container(
+                  width: 200,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Get.theme.primaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Logout',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),

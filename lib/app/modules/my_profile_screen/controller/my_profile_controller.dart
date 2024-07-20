@@ -33,6 +33,7 @@ class MyProfileController extends GetxController {
 
   Rx<bool> isShowPassword = true.obs;
   final isEditMode = false.obs;
+  final isLoadingEdit = false.obs;
 
   final networkC = Get.find<NetworkController>();
 
@@ -60,16 +61,19 @@ class MyProfileController extends GetxController {
   }
 
   Future<void> editProfile() async {
+    isLoadingEdit.value = true;
     formKey.currentState!.saveAndValidate();
-    logKey('zzz',formKey.currentState!.value);
     final data = {
       'name': formKey.currentState!.value['name'],
-      'gender': formKey.currentState!.value['gender'],
+      // 'gender': formKey.currentState!.value['gender'],
+      'gender': sessioC.user.value.gender,
       'date_of_birth': '${DateFormat('yyyy-MM-dd').format(formKey.currentState!.value['date_of_birth'])}',
-      'category': formKey.currentState!.value['category'],
+      'category': sessioC.user.value.categoryId,
       'email': formKey.currentState!.value['email'],
       'phone': formKey.currentState!.value['phone'],
     };
+    logKey('zzz', formKey.currentState!.value);
+    logKey('zzz', data);
     try {
       final Response res = await networkC.post(
         '$url/auth/update-profile',
@@ -80,7 +84,7 @@ class MyProfileController extends GetxController {
       logKey('res editProfile', res.data);
       logKey('birth date', data['date_of_birth']);
       if (res.data?['success'] ?? false) {
-        isEditMode.value = false;
+        // isEditMode.value = false;
         Get.snackbar('Success', 'Profile has been updated');
       }
       sessioC.user.value.name = data['name'];
@@ -88,10 +92,13 @@ class MyProfileController extends GetxController {
       sessioC.user.value.dateOfBirth = '${data['date_of_birth']}';
       sessioC.user.value.email = data['email'];
       sessioC.user.value.phone = data['phone'];
+      // isLoadingEdit.value = false;
+      // isEditMode.value = false;
     } on DioException catch (e) {
       logKey('error editProfile', e.response);
       Get.snackbar('Error', 'error edit profile');
     }
+    isLoadingEdit.value = false;
   }
 
   @override
